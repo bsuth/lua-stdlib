@@ -1,0 +1,8 @@
+return {
+  _all = {
+    ROOT = { 'spec' },
+    lpath = './?/init.lua',
+  },
+}
+
+-- vim: filetype=lua:
