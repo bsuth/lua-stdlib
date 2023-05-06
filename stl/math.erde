@@ -1,0 +1,34 @@
+function round(x) {
+  return math.floor(x + 0.5)
+}
+
+function clamp(x, min, max) {
+  return math.min(math.max(x, min), max)
+}
+
+function sum(...summands) {
+  local result = 0
+
+  for i, summand in ipairs(summands) {
+    result += summand
+  }
+
+  return result
+}
+
+function product(...multiplicands) {
+  local result = 1
+
+  for i, multiplicand in ipairs(multiplicands) {
+    result *= multiplicand
+  }
+
+  return result
+}
+
+return setmetatable({
+  round = round,
+  clamp = clamp,
+  sum = sum,
+  product = product,
+}, { __index = math })
