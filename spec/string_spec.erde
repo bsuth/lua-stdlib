@@ -1,0 +1,94 @@
+local { string } = require('stl')
+
+spec('default index to native string lib', () -> {
+  assert.is_function(string.byte)
+  assert.is_function(string.char)
+  assert.is_function(string.dump)
+})
+
+spec('escape', () -> {
+  assert.are.equal('a', string.escape('a'))
+  assert.are.equal('1', string.escape('1'))
+  assert.are.equal(',', string.escape(','))
+
+  assert.are.equal('%%', string.escape('%'))
+  assert.are.equal('%(', string.escape('('))
+  assert.are.equal('%)', string.escape(')'))
+  assert.are.equal('%.', string.escape('.'))
+  assert.are.equal('%*', string.escape('*'))
+  assert.are.equal('%?', string.escape('?'))
+  assert.are.equal('%[', string.escape('['))
+  assert.are.equal('%^', string.escape('^'))
+  assert.are.equal('%$', string.escape('$'))
+  assert.are.equal('%+', string.escape('+'))
+  assert.are.equal('%-', string.escape('-'))
+
+  assert.are.equal('a%%', string.escape('a%'))
+  assert.are.equal('a%(', string.escape('a('))
+  assert.are.equal('a%)', string.escape('a)'))
+  assert.are.equal('a%.', string.escape('a.'))
+  assert.are.equal('a%*', string.escape('a*'))
+  assert.are.equal('a%?', string.escape('a?'))
+  assert.are.equal('a%[', string.escape('a['))
+  assert.are.equal('a%^', string.escape('a^'))
+  assert.are.equal('a%$', string.escape('a$'))
+  assert.are.equal('a%+', string.escape('a+'))
+  assert.are.equal('a%-', string.escape('a-'))
+
+  assert.are.equal('%%', string.escape('%%'))
+  assert.are.equal('%(', string.escape('%('))
+  assert.are.equal('%)', string.escape('%)'))
+  assert.are.equal('%.', string.escape('%.'))
+  assert.are.equal('%*', string.escape('%*'))
+  assert.are.equal('%?', string.escape('%?'))
+  assert.are.equal('%[', string.escape('%['))
+  assert.are.equal('%^', string.escape('%^'))
+  assert.are.equal('%$', string.escape('%$'))
+  assert.are.equal('%+', string.escape('%+'))
+  assert.are.equal('%-', string.escape('%-'))
+
+  assert.are.equal('%%%(', string.escape('%%('))
+  assert.are.equal('%(%%', string.escape('(%%'))
+  assert.are.equal('%%%%', string.escape('%%%%'))
+  assert.are.equal('%%%(%%', string.escape('%%(%%'))
+})
+
+spec('split', () -> {
+  assert.are.same({ 'a', 'b', 'c' }, string.split('a b c'))
+  assert.are.same({ 'a', 'b', 'c' }, string.split('a  b \tc'))
+
+  assert.are.same({ '', 'a' }, string.split(' a'))
+  assert.are.same({ 'a', '' }, string.split('a '))
+  assert.are.same({ '', 'a', '' }, string.split(' a '))
+
+  assert.are.same({ ' ', ' ' }, string.split(' a ', '%a+'))
+  assert.are.same({ 'hello', 'world' }, string.split('hello11world', '%d+'))
+})
+
+spec('trim', () -> {
+  assert.are.equal('hello', string.trim('hello'))
+
+  assert.are.equal('hello', string.trim('hello '))
+  assert.are.equal('hello', string.trim(' hello'))
+  assert.are.equal('hello', string.trim(' hello '))
+  assert.are.equal('hello', string.trim('hello  '))
+  assert.are.equal('hello', string.trim('  hello'))
+  assert.are.equal('hello', string.trim('  hello  '))
+
+  assert.are.equal('hello', string.trim('\thello'))
+  assert.are.equal('hello', string.trim('hello\t'))
+  assert.are.equal('hello', string.trim('\thello\t'))
+  assert.are.equal('hello', string.trim('\t\thello'))
+  assert.are.equal('hello', string.trim('hello\t\t'))
+  assert.are.equal('hello', string.trim('\t\thello\t\t'))
+
+  assert.are.equal('hello', string.trim('\nhello'))
+  assert.are.equal('hello', string.trim('hello\n'))
+  assert.are.equal('hello', string.trim('\nhello\n'))
+  assert.are.equal('hello', string.trim('\n\nhello'))
+  assert.are.equal('hello', string.trim('hello\n\n'))
+  assert.are.equal('hello', string.trim('\n\nhello\n\n'))
+
+  assert.are.equal('hello', string.trim('\n\t hello\t \n'))
+  assert.are.equal('hello', string.trim('xxhelloxx', 'x+'))
+})

@@ -24,6 +24,7 @@ function loadlib(libname) {
 }
 
 loadlib('math')
+loadlib('string')
 loadlib('table')
 
 -- -----------------------------------------------------------------------------

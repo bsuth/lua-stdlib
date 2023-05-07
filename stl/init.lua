@@ -69,6 +69,11 @@ loadlib(
 )
 loadlib(
 (
+'string'
+)
+)
+loadlib(
+(
 'table'
 )
 )
