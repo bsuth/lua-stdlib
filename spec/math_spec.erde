@@ -7,6 +7,21 @@ spec('default index to native math lib', () -> {
   assert.is_function(math.max)
 })
 
+spec('clamp', () -> {
+  assert.are.equal(0, math.clamp(0, 0, 1))
+  assert.are.equal(0.5, math.clamp(0.5, 0, 1))
+  assert.are.equal(0, math.clamp(-0.5, 0, 1))
+  assert.are.equal(1, math.clamp(1.5, 0, 1))
+})
+
+spec('product', () -> {
+  assert.are.equal(1, math.product())
+  assert.are.equal(0, math.product(0))
+  assert.are.equal(1, math.product(1))
+  assert.are.equal(24, math.product(1, 2, 3, 4))
+  assert.are.equal(-6, math.product(1, -2, 3))
+})
+
 spec('round', () -> {
   assert.are.equal(-1, math.round(-1))
   assert.are.equal(-1, math.round(-0.9))
@@ -23,25 +38,10 @@ spec('round', () -> {
   assert.are.equal(1, math.round(1))
 })
 
-spec('clamp', () -> {
-  assert.are.equal(0, math.clamp(0, 0, 1))
-  assert.are.equal(0.5, math.clamp(0.5, 0, 1))
-  assert.are.equal(0, math.clamp(-0.5, 0, 1))
-  assert.are.equal(1, math.clamp(1.5, 0, 1))
-})
-
 spec('sum', () -> {
   assert.are.equal(0, math.sum())
   assert.are.equal(0, math.sum(0))
   assert.are.equal(1, math.sum(1))
   assert.are.equal(10, math.sum(1, 2, 3, 4))
   assert.are.equal(-2, math.sum(1, -2, 3, -4))
-})
-
-spec('product', () -> {
-  assert.are.equal(1, math.product())
-  assert.are.equal(0, math.product(0))
-  assert.are.equal(1, math.product(1))
-  assert.are.equal(24, math.product(1, 2, 3, 4))
-  assert.are.equal(-6, math.product(1, -2, 3))
 })
