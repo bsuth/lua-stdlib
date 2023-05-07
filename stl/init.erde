@@ -1,0 +1,65 @@
+local _MODULE = {}
+
+-- -----------------------------------------------------------------------------
+-- Global
+-- -----------------------------------------------------------------------------
+
+_MODULE.G = require('stl.G')
+
+-- Expose all globals directly from the module
+for key, value in pairs(_MODULE.G) {
+  _MODULE[key] = value
+}
+
+-- -----------------------------------------------------------------------------
+-- Libs
+-- -----------------------------------------------------------------------------
+
+local libs = {}
+
+function loadlib(libname) {
+  local lib = require("stl.{libname}")
+  _MODULE[libname] = lib
+  libs[libname] = lib
+}
+
+loadlib('math')
+loadlib('table')
+
+-- -----------------------------------------------------------------------------
+-- Load / Unload
+-- -----------------------------------------------------------------------------
+
+function _MODULE.load() {
+  for key, value in pairs(_MODULE.G) {
+    _G[key] = value
+  }
+
+  for name, lib in pairs(libs) {
+    for key, value in pairs(lib) {
+      _G[name][key] = value
+    }
+  }
+}
+
+function _MODULE.unload() {
+  for key, value in pairs(_MODULE.G) {
+    if _G[key] == value {
+      _G[key] = nil
+    }
+  }
+
+  for name, lib in pairs(libs) {
+    for key, value in pairs(lib) {
+      if _G[name][key] == value {
+        _G[name][key] = nil
+      }
+    }
+  }
+}
+
+-- -----------------------------------------------------------------------------
+-- Return
+-- -----------------------------------------------------------------------------
+
+return _MODULE
