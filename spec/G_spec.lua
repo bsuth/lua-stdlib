@@ -1,18 +1,18 @@
-local
-__ERDE_TMP_2__
-=
+local G
+do
+local __ERDE_TMP_2__
+__ERDE_TMP_2__=
 require(
 (
 'stl'
 )
 )
-local G = __ERDE_TMP_2__.G
-local
+G = __ERDE_TMP_2__["G"]
+end
 function
 collect_kpairs
 (t)
-local
-result
+local result
 =
 {
 }
@@ -76,14 +76,12 @@ assert
 .are
 .same(
 {
-mykey
-=
+mykey=
 (
 'hello'
 )
 ,
-myotherkey
-=
+myotherkey=
 (
 'world'
 )
@@ -92,14 +90,12 @@ myotherkey
 ,
 collect_kpairs(
 {
-mykey
-=
+mykey=
 (
 'hello'
 )
 ,
-myotherkey
-=
+myotherkey=
 (
 'world'
 )
@@ -111,14 +107,12 @@ assert
 .are
 .same(
 {
-mykey
-=
+mykey=
 (
 'hello'
 )
 ,
-myotherkey
-=
+myotherkey=
 (
 'world'
 )
@@ -127,14 +121,12 @@ myotherkey
 ,
 collect_kpairs(
 {
-mykey
-=
+mykey=
 (
 'hello'
 )
 ,
-myotherkey
-=
+myotherkey=
 (
 'world'
 )
@@ -152,5 +144,5 @@ myotherkey
 )
 end
 )
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

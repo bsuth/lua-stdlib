@@ -1,5 +1,4 @@
-local
-stl
+local stl
 =
 require(
 (
@@ -66,8 +65,7 @@ table
 .clone
 )
 stl
-.load(
-)
+.load()
 assert
 .is_function(
 kpairs
@@ -93,8 +91,7 @@ table
 .clone
 )
 stl
-.unload(
-)
+.unload()
 assert
 .is_nil(
 kpairs
@@ -121,5 +118,5 @@ table
 )
 end
 )
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

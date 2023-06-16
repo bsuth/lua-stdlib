@@ -1,12 +1,14 @@
-local
-__ERDE_TMP_2__
-=
+local math
+do
+local __ERDE_TMP_2__
+__ERDE_TMP_2__=
 require(
 (
 'stl'
 )
 )
-local math = __ERDE_TMP_2__.math
+math = __ERDE_TMP_2__["math"]
+end
 spec(
 (
 'default index to native math lib'
@@ -112,8 +114,7 @@ assert
 1
 ,
 math
-.product(
-)
+.product()
 )
 assert
 .are
@@ -328,8 +329,7 @@ assert
 0
 ,
 math
-.sum(
-)
+.sum()
 )
 assert
 .are
@@ -388,5 +388,5 @@ math
 )
 end
 )
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

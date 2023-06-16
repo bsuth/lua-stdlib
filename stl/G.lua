@@ -1,11 +1,9 @@
+local _MODULE = {}
 local
 function
 kpairs_iter
 (a,i)
-local
-key
-,
-value
+local key,value
 =
 i
 ,
@@ -44,6 +42,7 @@ t
 ,
 nil
 end
-return { kpairs=kpairs }
--- Compiled with Erde 0.5-1
+_MODULE.kpairs = kpairs
+return _MODULE
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

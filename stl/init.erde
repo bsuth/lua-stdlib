@@ -17,7 +17,7 @@ for key, value in pairs(_MODULE.G) {
 
 local libs = {}
 
-function loadlib(libname) {
+local function loadlib(libname) {
   local lib = require("stl.{libname}")
   _MODULE[libname] = lib
   libs[libname] = lib

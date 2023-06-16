@@ -46,8 +46,7 @@ local
 function
 clone
 (t)
-local
-result
+local result
 =
 {
 }
@@ -93,8 +92,7 @@ local
 function
 copy
 (t)
-local
-result
+local result
 =
 {
 }
@@ -172,8 +170,7 @@ local
 function
 filter
 (t,callback)
-local
-result
+local result
 =
 {
 }
@@ -283,8 +280,7 @@ local
 function
 keys
 (t)
-local
-result
+local result
 =
 {
 }
@@ -311,8 +307,7 @@ local
 function
 map
 (t,callback)
-local
-result
+local result
 =
 {
 }
@@ -325,10 +320,7 @@ pairs(
 t
 )
 do
-local
-newValue
-,
-newKey
+local newValue,newKey
 =
 callback(
 value
@@ -403,8 +395,7 @@ local
 function
 reverse
 (t)
-local
-len
+local len
 =
 #
 t
@@ -460,10 +451,7 @@ if __ERDE_SUBSTITUTE_end__ == nil then __ERDE_SUBSTITUTE_end__ =
 #
 t
 end
-local
-result
-,
-len
+local result,len
 =
 {
 }
@@ -530,8 +518,7 @@ local
 function
 values
 (t)
-local
-result
+local result
 =
 {
 }
@@ -557,62 +544,49 @@ end
 return
 setmetatable(
 {
-assign
-=
+assign=
 assign
 ,
-clone
-=
+clone=
 clone
 ,
-copy
-=
+copy=
 copy
 ,
-default
-=
+default=
 default
 ,
-filter
-=
+filter=
 filter
 ,
-find
-=
+find=
 find
 ,
-keys
-=
+keys=
 keys
 ,
-map
-=
+map=
 map
 ,
-reduce
-=
+reduce=
 reduce
 ,
-reverse
-=
+reverse=
 reverse
 ,
-slice
-=
+slice=
 slice
 ,
-values
-=
+values=
 values
 ,
 }
 ,
 {
-__index
-=
+__index=
 table
 ,
 }
 )
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

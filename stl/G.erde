@@ -1,4 +1,4 @@
-function kpairs_iter(a, i) {
+local function kpairs_iter(a, i) {
   local key, value = i, nil
 
   repeat {

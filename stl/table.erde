@@ -1,4 +1,4 @@
-function assign(t, ...) {
+local function assign(t, ...) {
   for _, _t in pairs({ ... }) {
     for key, value in pairs(_t) {
       if type(key) == 'string' {
@@ -8,7 +8,7 @@ function assign(t, ...) {
   }
 }
 
-function clone(t) {
+local function clone(t) {
   local result = {}
 
   for key, value in pairs(t) {
@@ -22,7 +22,7 @@ function clone(t) {
   return result
 }
 
-function copy(t) {
+local function copy(t) {
   local result = {}
 
   for key, value in pairs(t) {
@@ -32,7 +32,7 @@ function copy(t) {
   return result
 }
 
-function default(t, ...) {
+local function default(t, ...) {
   for _, _t in pairs({ ... }) {
     for key, value in pairs(_t) {
       if type(key) == 'string' && t[key] == nil {
@@ -42,7 +42,7 @@ function default(t, ...) {
   }
 }
 
-function filter(t, callback) {
+local function filter(t, callback) {
   local result = {}
 
   for key, value in pairs(t) {
@@ -58,7 +58,7 @@ function filter(t, callback) {
   return result
 }
 
-function find(t, callback) {
+local function find(t, callback) {
   if type(callback) == 'function' {
     for key, value in pairs(t) {
       if callback(value, key) {
@@ -74,7 +74,7 @@ function find(t, callback) {
   }
 }
 
-function keys(t) {
+local function keys(t) {
   local result = {}
 
   for key, value in pairs(t) {
@@ -84,7 +84,7 @@ function keys(t) {
   return result
 }
 
-function map(t, callback) {
+local function map(t, callback) {
   local result = {}
 
   for key, value in pairs(t) {
@@ -102,7 +102,7 @@ function map(t, callback) {
   return result
 }
 
-function reduce(t, result, callback) {
+local function reduce(t, result, callback) {
   for key, value in pairs(t) {
     result = callback(result, value, key)
   }
@@ -110,7 +110,7 @@ function reduce(t, result, callback) {
   return result
 }
 
-function reverse(t) {
+local function reverse(t) {
   local len = #t
 
   for i = 1, math.floor(len / 2) {
@@ -118,7 +118,7 @@ function reverse(t) {
   }
 }
 
-function slice(t, start = 0, end = #t) {
+local function slice(t, start = 0, end = #t) {
   local result, len = {}, #t
 
   if start < 0 { start = start + len + 1 }
@@ -131,7 +131,7 @@ function slice(t, start = 0, end = #t) {
   return result
 }
 
-function values(t) {
+local function values(t) {
   local result = {}
 
   for key, value in pairs(t) {

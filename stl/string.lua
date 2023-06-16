@@ -7,15 +7,11 @@ if separator == nil then separator =
 '%s+'
 )
 end
-local
-result
+local result
 =
 {
 }
-local
-start
-,
-__ERDE_SUBSTITUTE_end__
+local start,__ERDE_SUBSTITUTE_end__
 =
 s
 :find(
@@ -73,8 +69,7 @@ local
 function
 escape
 (s)
-local
-result
+local result
 =
 {
 }
@@ -199,26 +194,22 @@ end
 return
 setmetatable(
 {
-escape
-=
+escape=
 escape
 ,
-split
-=
+split=
 split
 ,
-trim
-=
+trim=
 trim
 ,
 }
 ,
 {
-__index
-=
+__index=
 string
 ,
 }
 )
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

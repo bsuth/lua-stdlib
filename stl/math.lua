@@ -20,8 +20,7 @@ function
 product
 (...)
 local multiplicands = { ... }
-local
-result
+local result
 =
 1
 for
@@ -59,8 +58,7 @@ function
 sum
 (...)
 local summands = { ... }
-local
-result
+local result
 =
 0
 for
@@ -84,30 +82,25 @@ end
 return
 setmetatable(
 {
-clamp
-=
+clamp=
 clamp
 ,
-product
-=
+product=
 product
 ,
-round
-=
+round=
 round
 ,
-sum
-=
+sum=
 sum
 ,
 }
 ,
 {
-__index
-=
+__index=
 math
 ,
 }
 )
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

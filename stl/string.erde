@@ -1,4 +1,4 @@
-function split(s, separator = '%s+') {
+local function split(s, separator = '%s+') {
   local result = {}
   local start, end = s:find(separator)
 
@@ -12,7 +12,7 @@ function split(s, separator = '%s+') {
   return result
 }
 
-function escape(s) {
+local function escape(s) {
   local result = {}
 
   for _, part in ipairs(split(s, '%%%%')) {
@@ -26,7 +26,7 @@ function escape(s) {
   return table.concat(result, '%%')
 }
 
-function trim(s, pattern = '%s+') {
+local function trim(s, pattern = '%s+') {
   -- Wrap in parentheses to only get first return
   return (s:gsub("^{pattern}", ''):gsub("{pattern}$", ''))
 }

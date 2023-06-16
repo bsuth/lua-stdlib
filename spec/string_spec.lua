@@ -1,12 +1,14 @@
-local
-__ERDE_TMP_2__
-=
+local string
+do
+local __ERDE_TMP_2__
+__ERDE_TMP_2__=
 require(
 (
 'stl'
 )
 )
-local string = __ERDE_TMP_2__.string
+string = __ERDE_TMP_2__["string"]
+end
 spec(
 (
 'default index to native string lib'
@@ -1079,5 +1081,5 @@ string
 )
 end
 )
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

@@ -1,5 +1,4 @@
-local
-_MODULE
+local _MODULE
 =
 {
 }
@@ -28,8 +27,7 @@ key
 =
 value
 end
-local
-libs
+local libs
 =
 {
 }
@@ -37,8 +35,7 @@ local
 function
 loadlib
 (libname)
-local
-lib
+local lib
 =
 require(
 (
@@ -200,5 +197,5 @@ end
 end
 return
 _MODULE
--- Compiled with Erde 0.5-1
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__
