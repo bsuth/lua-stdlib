@@ -1,0 +1,323 @@
+-- -----------------------------------------------------------------------------
+-- Load / Unload
+-- -----------------------------------------------------------------------------
+
+module function load() {
+  for key, value in pairs(_MODULE) {
+    local value_type = type(value)
+
+    if value_type == 'function' {
+      if key != 'load' && key != 'unload' {
+        _G[key] = value
+      }
+    } elseif value_type == 'table' {
+      local library = _G[key]
+
+      if type(library) == 'table' {
+        for subkey, subvalue in pairs(value) {
+          library[subkey] = subvalue
+        }
+      }
+    }
+  }
+}
+
+module function unload() {
+  for key, value in pairs(_MODULE) {
+    local value_type = type(value)
+
+    if value_type == 'function' {
+      if _G[key] == value { -- only remove values we injected
+        _G[key] = nil
+      }
+    } elseif value_type == 'table' {
+      local library = _G[key]
+
+      if type(library) == 'table' {
+        for subkey, subvalue in pairs(value) {
+          if library[subkey] == subvalue { -- only remove values we injected
+            library[subkey] = nil
+          }
+        }
+      }
+    }
+  }
+}
+
+-- -----------------------------------------------------------------------------
+-- Globals
+-- -----------------------------------------------------------------------------
+
+local function _kpairs_iter(a, i) {
+  local key, value = i, nil
+
+  repeat {
+    key, value = next(a, key)
+  } until type(key) != 'number'
+
+  return key, value
+}
+
+module function kpairs(t) {
+  return _kpairs_iter, t, nil
+}
+
+-- -----------------------------------------------------------------------------
+-- Coroutine
+-- -----------------------------------------------------------------------------
+
+local _native_coroutine = coroutine
+module coroutine = setmetatable({}, { __index = _native_coroutine })
+
+-- -----------------------------------------------------------------------------
+-- Debug
+-- -----------------------------------------------------------------------------
+
+local _native_debug = debug
+module debug = setmetatable({}, { __index = _native_debug })
+
+-- -----------------------------------------------------------------------------
+-- IO
+-- -----------------------------------------------------------------------------
+
+local _native_io = io
+module io = setmetatable({}, { __index = _native_io })
+
+-- -----------------------------------------------------------------------------
+-- Math
+-- -----------------------------------------------------------------------------
+
+local _native_math = math
+module math = setmetatable({}, { __index = _native_math })
+
+function math.clamp(x, min, max) {
+  return math.min(math.max(x, min), max)
+}
+
+function math.product(...multiplicands) {
+  local result = 1
+
+  for i, multiplicand in ipairs(multiplicands) {
+    result *= multiplicand
+  }
+
+  return result
+}
+
+function math.round(x) {
+  return math.floor(x + 0.5)
+}
+
+function math.sum(...summands) {
+  local result = 0
+
+  for i, summand in ipairs(summands) {
+    result += summand
+  }
+
+  return result
+}
+
+-- -----------------------------------------------------------------------------
+-- OS
+-- -----------------------------------------------------------------------------
+
+local _native_os = os
+module os = setmetatable({}, { __index = _native_os })
+
+-- -----------------------------------------------------------------------------
+-- Package
+-- -----------------------------------------------------------------------------
+
+local _native_package = package
+module package = setmetatable({}, { __index = _native_package })
+
+-- -----------------------------------------------------------------------------
+-- String
+-- -----------------------------------------------------------------------------
+
+local _native_string = string
+module string = setmetatable({}, { __index = _native_string })
+
+function string.split(s, separator = '%s+') {
+  local result = {}
+  local start, end = s:find(separator)
+
+  while start != nil {
+    table.insert(result, s:sub(1, start - 1))
+    s = s:sub(end + 1) || ''
+    start, end = s:find(separator)
+  }
+
+  table.insert(result, s)
+  return result
+}
+
+function string.escape(s) {
+  local result = {}
+
+  for _, part in ipairs(string.split(s, '%%%%')) {
+    part = part:gsub('^([().*?[^$+-])', '%%%1')
+    part = part:gsub('([^%%])([().*?[^$+-])', '%1%%%2')
+    part = part:gsub('%%([^%%().*?[^$+-])', '%%%%%1')
+    part = part:gsub('%%$', '%%%%')
+    table.insert(result, part)
+  }
+
+  return table.concat(result, '%%')
+}
+
+function string.trim(s, pattern = '%s+') {
+  -- Wrap in parentheses to only get first return
+  return (s:gsub("^{pattern}", ''):gsub("{pattern}$", ''))
+}
+
+-- -----------------------------------------------------------------------------
+-- Table
+-- -----------------------------------------------------------------------------
+
+local _native_table = table
+module table = setmetatable({}, { __index = _native_table })
+
+function table.assign(t, ...) {
+  for _, _t in pairs({ ... }) {
+    for key, value in pairs(_t) {
+      if type(key) == 'string' {
+        t[key] = value
+      }
+    }
+  }
+}
+
+function table.clone(t) {
+  local result = {}
+
+  for key, value in pairs(t) {
+    if type(value) == 'table' {
+      result[key] = table.clone(value)
+    } else {
+      result[key] = value
+    }
+  }
+
+  return result
+}
+
+function table.copy(t) {
+  local result = {}
+
+  for key, value in pairs(t) {
+    result[key] = value
+  }
+
+  return result
+}
+
+function table.default(t, ...) {
+  for _, _t in pairs({ ... }) {
+    for key, value in pairs(_t) {
+      if type(key) == 'string' && t[key] == nil {
+        t[key] = value
+      }
+    }
+  }
+}
+
+function table.filter(t, callback) {
+  local result = {}
+
+  for key, value in pairs(t) {
+    if callback(value, key) {
+      if type(key) == 'number' {
+        table.insert(result, value)
+      } else {
+        result[key] = value
+      }
+    }
+  }
+
+  return result
+}
+
+function table.find(t, callback) {
+  if type(callback) == 'function' {
+    for key, value in pairs(t) {
+      if callback(value, key) {
+        return value, key
+      }
+    }
+  } else {
+    for key, value in pairs(t) {
+      if value == callback {
+        return value, key
+      }
+    }
+  }
+}
+
+function table.keys(t) {
+  local result = {}
+
+  for key, value in pairs(t) {
+    table.insert(result, key)
+  }
+
+  return result
+}
+
+function table.map(t, callback) {
+  local result = {}
+
+  for key, value in pairs(t) {
+    local newValue, newKey = callback(value, key)
+
+    if newKey != nil {
+      result[newKey] = newValue
+    } elseif type(key) == 'number' {
+      table.insert(result, newValue)
+    } else {
+      result[key] = newValue
+    }
+  }
+
+  return result
+}
+
+function table.reduce(t, result, callback) {
+  for key, value in pairs(t) {
+    result = callback(result, value, key)
+  }
+
+  return result
+}
+
+function table.reverse(t) {
+  local len = #t
+
+  for i = 1, math.floor(len / 2) {
+    t[i], t[len - i + 1] = t[len - i + 1], t[i]
+  }
+}
+
+function table.slice(t, start = 0, end = #t) {
+  local result, len = {}, #t
+
+  if start < 0 { start = start + len + 1 }
+  if end < 0 { end = end + len + 1 }
+
+  for i = math.max(start, 0), math.min(end, len) {
+    table.insert(result, t[i])
+  }
+
+  return result
+}
+
+function table.values(t) {
+  local result = {}
+
+  for key, value in pairs(t) {
+    table.insert(result, value)
+  }
+
+  return result
+}

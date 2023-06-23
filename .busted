@@ -1,8 +1,2 @@
-return {
-  _all = {
-    ROOT = { 'spec' },
-    lpath = './?/init.lua',
-  },
-}
-
+return { _all = { ROOT = { '.' } } }
 -- vim: filetype=lua:
