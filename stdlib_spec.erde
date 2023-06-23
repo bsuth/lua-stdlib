@@ -17,27 +17,56 @@ local function any_sort(a, b) {
 -- -----------------------------------------------------------------------------
 
 spec('load / unload', () -> {
-  assert.is_nil(kpairs)
-  assert.is_nil(math.clamp)
-  assert.is_nil(math.round)
-  assert.is_nil(table.assign)
-  assert.is_nil(table.clone)
+  local function assert_loaded(library_name) {
+    for key in pairs(stdlib[library_name]) {
+      assert.are.equal(_G[library_name][key], stdlib[library_name][key])
+    }
+  }
+
+  local function assert_unloaded(library_name) {
+    for key in pairs(stdlib[library_name]) {
+      assert.is_nil(_G[library_name][key])
+    }
+  }
+
+  assert_unloaded('coroutine')
+  assert_unloaded('debug')
+  assert_unloaded('io')
+  assert_unloaded('math')
+  assert_unloaded('os')
+  assert_unloaded('package')
+  assert_unloaded('string')
+  assert_unloaded('table')
 
   stdlib.load()
 
-  assert.is_function(kpairs)
-  assert.is_function(math.clamp)
-  assert.is_function(math.round)
-  assert.is_function(table.assign)
-  assert.is_function(table.clone)
+  -- make sure `load` and `unload` themselves are not injected
+  assert.are_not.equal(_G.load, stdlib.load)
+  assert.are_not.equal(_G.unload, stdlib.unload)
+
+  -- globals
+  assert.are.equal(_G.kpairs, stdlib.kpairs)
+
+  -- libraries
+  assert_loaded('coroutine')
+  assert_loaded('debug')
+  assert_loaded('io')
+  assert_loaded('math')
+  assert_loaded('os')
+  assert_loaded('package')
+  assert_loaded('string')
+  assert_loaded('table')
 
   stdlib.unload()
 
-  assert.is_nil(kpairs)
-  assert.is_nil(math.clamp)
-  assert.is_nil(math.round)
-  assert.is_nil(table.assign)
-  assert.is_nil(table.clone)
+  assert_unloaded('coroutine')
+  assert_unloaded('debug')
+  assert_unloaded('io')
+  assert_unloaded('math')
+  assert_unloaded('os')
+  assert_unloaded('package')
+  assert_unloaded('string')
+  assert_unloaded('table')
 })
 
 -- -----------------------------------------------------------------------------
