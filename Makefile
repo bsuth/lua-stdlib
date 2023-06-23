@@ -1,4 +1,4 @@
-.PHONY: test
+.PHONY: compile test
 
 define runtest
 	$(eval LUA_EXECUTABLE = $(1))
@@ -6,6 +6,10 @@ define runtest
   @busted --lua="/usr/bin/$(LUA_EXECUTABLE)"
   @echo
 endef
+
+compile:
+	erde compile .
+	stylua .
 
 test:
 	@echo
