@@ -1,4 +1,11 @@
 local stdlib = require("stdlib")
+local function any_sort(a, b)
+	if type(a) == type(b) then
+		return a < b
+	else
+		return type(a) < type(b)
+	end
+end
 spec("load / unload", function()
 	assert.is_nil(kpairs)
 	assert.is_nil(math.clamp)
@@ -18,44 +25,35 @@ spec("load / unload", function()
 	assert.is_nil(table.assign)
 	assert.is_nil(table.clone)
 end)
-local function collect_kpairs(t)
-	local result = {}
-	for key, value in stdlib.kpairs(t) do
-		result[key] = value
-	end
-	return result
-end
 spec("kpairs", function()
-	assert.are.same({}, collect_kpairs({}))
-	assert.are.same(
-		{},
-		collect_kpairs({
-			"hello",
-			"world",
-		})
-	)
-	assert.are.same(
-		{
-			mykey = "hello",
-			myotherkey = "world",
-		},
-		collect_kpairs({
-			mykey = "hello",
-			myotherkey = "world",
-		})
-	)
-	assert.are.same(
-		{
-			mykey = "hello",
-			myotherkey = "world",
-		},
-		collect_kpairs({
-			mykey = "hello",
-			myotherkey = "world",
-			"hello",
-			"world",
-		})
-	)
+	local function assert_kpairs(expected, t)
+		local result = {}
+		for key, value in stdlib.kpairs(t) do
+			result[key] = value
+		end
+		assert.are.same(expected, result)
+	end
+	assert_kpairs({}, {})
+	assert_kpairs({}, {
+		"hello",
+		"world",
+	})
+	assert_kpairs({
+		mykey = "hello",
+		myotherkey = "world",
+	}, {
+		mykey = "hello",
+		myotherkey = "world",
+	})
+	assert_kpairs({
+		mykey = "hello",
+		myotherkey = "world",
+	}, {
+		mykey = "hello",
+		myotherkey = "world",
+		"hello",
+		"world",
+	})
 end)
 spec("coroutine", function()
 	assert.is_table(stdlib.coroutine)
@@ -232,18 +230,6 @@ spec("string.trim", function()
 	assert.are.equal("hello", stdlib.string.trim("\n\t hello\t \n"))
 	assert.are.equal("hello", stdlib.string.trim("xxhelloxx", "x+"))
 end)
-local function array_sort(a, b)
-	if type(a) == type(b) then
-		return a < b
-	else
-		return type(a) == "number"
-	end
-end
-local function assert_array(expected, received)
-	table.sort(expected, array_sort)
-	table.sort(received, array_sort)
-	assert.are.same(expected, received)
-end
 spec("table", function()
 	assert.is_table(stdlib.table)
 	for key in pairs(table) do
@@ -668,53 +654,44 @@ spec("table.find", function()
 	end)
 end)
 spec("table.keys", function()
-	assert_array({}, stdlib.table.keys({}))
-	assert_array(
-		{
-			1,
-		},
-		stdlib.table.keys({
-			"a",
-		})
-	)
-	assert_array(
-		{
-			1,
-			2,
-		},
-		stdlib.table.keys({
-			"a",
-			"b",
-		})
-	)
-	assert_array(
-		{
-			"a",
-		},
-		stdlib.table.keys({
-			a = 10,
-		})
-	)
-	assert_array(
-		{
-			"a",
-			"b",
-		},
-		stdlib.table.keys({
-			a = 10,
-			b = 20,
-		})
-	)
-	assert_array(
-		{
-			1,
-			"b",
-		},
-		stdlib.table.keys({
-			"a",
-			b = 10,
-		})
-	)
+	local function assert_keys(expected, t)
+		local keys = stdlib.table.keys(t)
+		table.sort(expected, any_sort)
+		table.sort(keys, any_sort)
+		assert.are.same(expected, keys)
+	end
+	assert_keys({}, {})
+	assert_keys({
+		1,
+	}, {
+		"a",
+	})
+	assert_keys({
+		1,
+		2,
+	}, {
+		"a",
+		"b",
+	})
+	assert_keys({
+		"a",
+	}, {
+		a = 10,
+	})
+	assert_keys({
+		"a",
+		"b",
+	}, {
+		a = 10,
+		b = 20,
+	})
+	assert_keys({
+		1,
+		"b",
+	}, {
+		"a",
+		b = 10,
+	})
 end)
 spec("table.map", function()
 	assert.are.same(
@@ -1073,53 +1050,44 @@ spec("table.slice", function()
 	)
 end)
 spec("table.values", function()
-	assert_array({}, stdlib.table.values({}))
-	assert_array(
-		{
-			"a",
-		},
-		stdlib.table.values({
-			"a",
-		})
-	)
-	assert_array(
-		{
-			"a",
-			"b",
-		},
-		stdlib.table.values({
-			"a",
-			"b",
-		})
-	)
-	assert_array(
-		{
-			1,
-		},
-		stdlib.table.values({
-			a = 1,
-		})
-	)
-	assert_array(
-		{
-			1,
-			2,
-		},
-		stdlib.table.values({
-			a = 1,
-			b = 2,
-		})
-	)
-	assert_array(
-		{
-			1,
-			"a",
-		},
-		stdlib.table.values({
-			"a",
-			b = 1,
-		})
-	)
+	local function assert_values(expected, t)
+		local values = stdlib.table.values(t)
+		table.sort(expected, any_sort)
+		table.sort(values, any_sort)
+		assert.are.same(expected, values)
+	end
+	assert_values({}, {})
+	assert_values({
+		"a",
+	}, {
+		"a",
+	})
+	assert_values({
+		"a",
+		"b",
+	}, {
+		"a",
+		"b",
+	})
+	assert_values({
+		1,
+	}, {
+		a = 1,
+	})
+	assert_values({
+		1,
+		2,
+	}, {
+		a = 1,
+		b = 2,
+	})
+	assert_values({
+		1,
+		"a",
+	}, {
+		"a",
+		b = 1,
+	})
 end)
 -- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

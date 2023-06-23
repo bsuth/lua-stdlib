@@ -1,6 +1,18 @@
 local stdlib = require('stdlib')
 
 -- -----------------------------------------------------------------------------
+-- Helpers
+-- -----------------------------------------------------------------------------
+
+local function any_sort(a, b) {
+  if type(a) == type(b) {
+    return a < b
+  } else {
+    return type(a) < type(b)
+  }
+}
+
+-- -----------------------------------------------------------------------------
 -- Load / Unload
 -- -----------------------------------------------------------------------------
 
@@ -32,40 +44,26 @@ spec('load / unload', () -> {
 -- Globals
 -- -----------------------------------------------------------------------------
 
-local function collect_kpairs(t) {
-  local result = {}
+spec('kpairs', () -> {
+  local function assert_kpairs(expected, t) {
+    local result = {}
 
-  for key, value in stdlib.kpairs(t) {
-    result[key] = value
+    for key, value in stdlib.kpairs(t) {
+      result[key] = value
+    }
+
+    assert.are.same(expected, result)
   }
 
-  return result
-}
-
-spec('kpairs', () -> {
-  assert.are.same({}, collect_kpairs({}))
-  assert.are.same({}, collect_kpairs({ 'hello', 'world' }))
-  assert.are.same(
-    {
-      mykey = 'hello',
-      myotherkey = 'world',
-    },
-    collect_kpairs({
-      mykey = 'hello',
-      myotherkey = 'world',
-    }),
+  assert_kpairs({}, {})
+  assert_kpairs({}, { 'hello', 'world' })
+  assert_kpairs(
+    { mykey = 'hello', myotherkey = 'world' },
+    { mykey = 'hello', myotherkey = 'world' },
   )
-  assert.are.same(
-    {
-      mykey = 'hello',
-      myotherkey = 'world',
-    },
-    collect_kpairs({
-      mykey = 'hello',
-      myotherkey = 'world',
-      'hello',
-      'world',
-    }),
+  assert_kpairs(
+    { mykey = 'hello', myotherkey = 'world' },
+    { mykey = 'hello', myotherkey = 'world', 'hello', 'world' },
   )
 })
 
@@ -276,21 +274,6 @@ spec('string.trim', () -> {
 -- Table
 -- -----------------------------------------------------------------------------
 
-local function array_sort(a, b) {
-  if type(a) == type(b) {
-    return a < b
-  } else {
-    return type(a) == 'number'
-  }
-}
-
-local function assert_array(expected, received) {
-  -- Sort before asserting to ensure consistent order
-  table.sort(expected, array_sort)
-  table.sort(received, array_sort)
-  assert.are.same(expected, received)
-}
-
 spec('table', () -> {
   assert.is_table(stdlib.table)
   for key in pairs(table) {
@@ -416,15 +399,19 @@ spec('table.find', () -> {
 })
 
 spec('table.keys', () -> {
-  assert_array({}, stdlib.table.keys({}))
+  local function assert_keys(expected, t) {
+    local keys = stdlib.table.keys(t)
+    table.sort(expected, any_sort)
+    table.sort(keys, any_sort)
+    assert.are.same(expected, keys)
+  }
 
-  assert_array({ 1 }, stdlib.table.keys({ 'a' }))
-  assert_array({ 1, 2 }, stdlib.table.keys({ 'a', 'b' }))
-
-  assert_array({ 'a' }, stdlib.table.keys({ a = 10 }))
-  assert_array({ 'a', 'b' }, stdlib.table.keys({ a = 10, b = 20 }))
-
-  assert_array({ 1, 'b' }, stdlib.table.keys({ 'a', b = 10 }))
+  assert_keys({}, {})
+  assert_keys({ 1 }, { 'a' })
+  assert_keys({ 1, 2 }, { 'a', 'b' })
+  assert_keys({ 'a' }, { a = 10 })
+  assert_keys({ 'a', 'b' }, { a = 10, b = 20 })
+  assert_keys({ 1, 'b' }, { 'a', b = 10 })
 })
 
 spec('table.map', () -> {
@@ -486,13 +473,17 @@ spec('table.slice', () -> {
 })
 
 spec('table.values', () -> {
-  assert_array({}, stdlib.table.values({}))
+  local function assert_values(expected, t) {
+    local values = stdlib.table.values(t)
+    table.sort(expected, any_sort)
+    table.sort(values, any_sort)
+    assert.are.same(expected, values)
+  }
 
-  assert_array({ 'a' }, stdlib.table.values({ 'a' }))
-  assert_array({ 'a', 'b' }, stdlib.table.values({ 'a', 'b' }))
-
-  assert_array({ 1 }, stdlib.table.values({ a = 1 }))
-  assert_array({ 1, 2 }, stdlib.table.values({ a = 1, b = 2 }))
-
-  assert_array({ 1, 'a' }, stdlib.table.values({ 'a', b = 1 }))
+  assert_values({}, {})
+  assert_values({ 'a' }, { 'a' })
+  assert_values({ 'a', 'b' }, { 'a', 'b' })
+  assert_values({ 1 }, { a = 1 })
+  assert_values({ 1, 2 }, { a = 1, b = 2 })
+  assert_values({ 1, 'a' }, { 'a', b = 1 })
 })
