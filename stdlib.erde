@@ -139,20 +139,6 @@ module package = setmetatable({}, { __index = _native_package })
 local _native_string = string
 module string = setmetatable({}, { __index = _native_string })
 
-function string.split(s, separator = '%s+') {
-  local result = {}
-  local start, end = s:find(separator)
-
-  while start != nil {
-    table.insert(result, s:sub(1, start - 1))
-    s = s:sub(end + 1) || ''
-    start, end = s:find(separator)
-  }
-
-  table.insert(result, s)
-  return result
-}
-
 function string.escape(s) {
   local result = {}
 
@@ -165,6 +151,20 @@ function string.escape(s) {
   }
 
   return table.concat(result, '%%')
+}
+
+function string.split(s, separator = '%s+') {
+  local result = {}
+  local start, end = s:find(separator)
+
+  while start != nil {
+    table.insert(result, s:sub(1, start - 1))
+    s = s:sub(end + 1) || ''
+    start, end = s:find(separator)
+  }
+
+  table.insert(result, s)
+  return result
 }
 
 function string.trim(s, pattern = '%s+') {

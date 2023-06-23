@@ -18,26 +18,83 @@ spec("load / unload", function()
 	assert.is_nil(table.assign)
 	assert.is_nil(table.clone)
 end)
-spec("default index to native math lib", function()
-	assert.is_function(stdlib.math.ceil)
-	assert.is_function(stdlib.math.floor)
-	assert.is_function(stdlib.math.min)
-	assert.is_function(stdlib.math.max)
+local function collect_kpairs(t)
+	local result = {}
+	for key, value in stdlib.kpairs(t) do
+		result[key] = value
+	end
+	return result
+end
+spec("kpairs", function()
+	assert.are.same({}, collect_kpairs({}))
+	assert.are.same(
+		{},
+		collect_kpairs({
+			"hello",
+			"world",
+		})
+	)
+	assert.are.same(
+		{
+			mykey = "hello",
+			myotherkey = "world",
+		},
+		collect_kpairs({
+			mykey = "hello",
+			myotherkey = "world",
+		})
+	)
+	assert.are.same(
+		{
+			mykey = "hello",
+			myotherkey = "world",
+		},
+		collect_kpairs({
+			mykey = "hello",
+			myotherkey = "world",
+			"hello",
+			"world",
+		})
+	)
 end)
-spec("clamp", function()
+spec("coroutine", function()
+	assert.is_table(stdlib.coroutine)
+	for key in pairs(coroutine) do
+		assert.are.equal(coroutine[key], stdlib.coroutine[key])
+	end
+end)
+spec("debug", function()
+	assert.is_table(stdlib.debug)
+	for key in pairs(debug) do
+		assert.are.equal(debug[key], stdlib.debug[key])
+	end
+end)
+spec("io", function()
+	assert.is_table(stdlib.io)
+	for key in pairs(io) do
+		assert.are.equal(io[key], stdlib.io[key])
+	end
+end)
+spec("math", function()
+	assert.is_table(stdlib.math)
+	for key in pairs(math) do
+		assert.are.equal(math[key], stdlib.math[key])
+	end
+end)
+spec("math.clamp", function()
 	assert.are.equal(0, stdlib.math.clamp(0, 0, 1))
 	assert.are.equal(0.5, stdlib.math.clamp(0.5, 0, 1))
 	assert.are.equal(0, stdlib.math.clamp(-0.5, 0, 1))
 	assert.are.equal(1, stdlib.math.clamp(1.5, 0, 1))
 end)
-spec("product", function()
+spec("math.product", function()
 	assert.are.equal(1, stdlib.math.product())
 	assert.are.equal(0, stdlib.math.product(0))
 	assert.are.equal(1, stdlib.math.product(1))
 	assert.are.equal(24, stdlib.math.product(1, 2, 3, 4))
 	assert.are.equal(-6, stdlib.math.product(1, -2, 3))
 end)
-spec("round", function()
+spec("math.round", function()
 	assert.are.equal(-1, stdlib.math.round(-1))
 	assert.are.equal(-1, stdlib.math.round(-0.9))
 	assert.are.equal(-1, stdlib.math.round(-0.51))
@@ -52,19 +109,32 @@ spec("round", function()
 	assert.are.equal(1, stdlib.math.round(0.9))
 	assert.are.equal(1, stdlib.math.round(1))
 end)
-spec("sum", function()
+spec("math.sum", function()
 	assert.are.equal(0, stdlib.math.sum())
 	assert.are.equal(0, stdlib.math.sum(0))
 	assert.are.equal(1, stdlib.math.sum(1))
 	assert.are.equal(10, stdlib.math.sum(1, 2, 3, 4))
 	assert.are.equal(-2, stdlib.math.sum(1, -2, 3, -4))
 end)
-spec("default index to native string lib", function()
-	assert.is_function(stdlib.string.byte)
-	assert.is_function(stdlib.string.char)
-	assert.is_function(stdlib.string.dump)
+spec("os", function()
+	assert.is_table(stdlib.os)
+	for key in pairs(os) do
+		assert.are.equal(os[key], stdlib.os[key])
+	end
 end)
-spec("escape", function()
+spec("package", function()
+	assert.is_table(stdlib.package)
+	for key in pairs(package) do
+		assert.are.equal(package[key], stdlib.package[key])
+	end
+end)
+spec("string", function()
+	assert.is_table(stdlib.string)
+	for key in pairs(string) do
+		assert.are.equal(string[key], stdlib.string[key])
+	end
+end)
+spec("string.escape", function()
 	assert.are.equal("a", stdlib.string.escape("a"))
 	assert.are.equal("1", stdlib.string.escape("1"))
 	assert.are.equal(",", stdlib.string.escape(","))
@@ -106,7 +176,7 @@ spec("escape", function()
 	assert.are.equal("%%%%", stdlib.string.escape("%%%%"))
 	assert.are.equal("%%%(%%", stdlib.string.escape("%%(%%"))
 end)
-spec("split", function()
+spec("string.split", function()
 	assert.are.same({
 		"a",
 		"b",
@@ -139,7 +209,7 @@ spec("split", function()
 		"world",
 	}, stdlib.string.split("hello11world", "%d+"))
 end)
-spec("trim", function()
+spec("string.trim", function()
 	assert.are.equal("hello", stdlib.string.trim("hello"))
 	assert.are.equal("hello", stdlib.string.trim("hello "))
 	assert.are.equal("hello", stdlib.string.trim(" hello"))
@@ -174,13 +244,14 @@ local function assert_array(expected, received)
 	table.sort(received, array_sort)
 	assert.are.same(expected, received)
 end
-spec("default index to native table lib", function()
-	assert.is_function(stdlib.table.insert)
-	assert.is_function(stdlib.table.remove)
-	assert.is_function(stdlib.table.concat)
+spec("table", function()
+	assert.is_table(stdlib.table)
+	for key in pairs(table) do
+		assert.are.equal(table[key], stdlib.table[key])
+	end
 end)
-spec("assign", function()
-	function assert_assign(expected, target, ...)
+spec("table.assign", function()
+	local function assert_assign(expected, target, ...)
 		stdlib.table.assign(target, ...)
 		assert.are.same(expected, target)
 	end
@@ -239,8 +310,8 @@ spec("assign", function()
 		1,
 	})
 end)
-spec("clone", function()
-	function assert_clone(t, clone)
+spec("table.clone", function()
+	local function assert_clone(t, clone)
 		if clone == nil then
 			clone = stdlib.table.clone(t)
 		end
@@ -292,8 +363,8 @@ spec("clone", function()
 		},
 	})
 end)
-spec("copy", function()
-	function assert_copy(t)
+spec("table.copy", function()
+	local function assert_copy(t)
 		local copy = stdlib.table.copy(t)
 		assert.are_not.equal(t, copy)
 		assert.are.same(t, copy)
@@ -341,8 +412,8 @@ spec("copy", function()
 		},
 	})
 end)
-spec("default", function()
-	function assert_default(expected, target, ...)
+spec("table.default", function()
+	local function assert_default(expected, target, ...)
 		stdlib.table.default(target, ...)
 		assert.are.same(expected, target)
 	end
@@ -401,7 +472,7 @@ spec("default", function()
 		1,
 	})
 end)
-spec("filter", function()
+spec("table.filter", function()
 	assert.are.same(
 		{},
 		stdlib.table.filter({}, function()
@@ -518,8 +589,8 @@ spec("filter", function()
 		end)
 	)
 end)
-spec("find", function()
-	function assert_find(expected_key, t, callback)
+spec("table.find", function()
+	local function assert_find(expected_key, t, callback)
 		local value, key = stdlib.table.find(t, callback)
 		assert.are.equal(expected_key, key)
 		assert.are.equal(t[expected_key], value)
@@ -596,7 +667,7 @@ spec("find", function()
 		return value < 20
 	end)
 end)
-spec("keys", function()
+spec("table.keys", function()
 	assert_array({}, stdlib.table.keys({}))
 	assert_array(
 		{
@@ -645,7 +716,7 @@ spec("keys", function()
 		})
 	)
 end)
-spec("map", function()
+spec("table.map", function()
 	assert.are.same(
 		{},
 		stdlib.table.map({}, function(value)
@@ -719,7 +790,7 @@ spec("map", function()
 		end)
 	)
 end)
-spec("reduce", function()
+spec("table.reduce", function()
 	assert.are.equal(
 		60,
 		stdlib.table.reduce(
@@ -777,8 +848,8 @@ spec("reduce", function()
 		)
 	)
 end)
-spec("reverse", function()
-	function assert_reverse(expected, t)
+spec("table.reverse", function()
+	local function assert_reverse(expected, t)
 		stdlib.table.reverse(t)
 		assert.are.same(expected, t)
 	end
@@ -816,7 +887,7 @@ spec("reverse", function()
 		d = true,
 	})
 end)
-spec("slice", function()
+spec("table.slice", function()
 	assert.are.same({}, stdlib.table.slice({}))
 	assert.are.same(
 		{
@@ -1001,7 +1072,7 @@ spec("slice", function()
 		}, 4)
 	)
 end)
-spec("values", function()
+spec("table.values", function()
 	assert_array({}, stdlib.table.values({}))
 	assert_array(
 		{

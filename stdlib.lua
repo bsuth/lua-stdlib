@@ -105,6 +105,17 @@ local string = setmetatable({}, {
 	__index = _native_string,
 })
 _MODULE.string = string
+function string.escape(s)
+	local result = {}
+	for _, part in ipairs(string.split(s, "%%%%")) do
+		part = part:gsub("^([().*?[^$+-])", "%%%1")
+		part = part:gsub("([^%%])([().*?[^$+-])", "%1%%%2")
+		part = part:gsub("%%([^%%().*?[^$+-])", "%%%%%1")
+		part = part:gsub("%%$", "%%%%")
+		table.insert(result, part)
+	end
+	return table.concat(result, "%%")
+end
 function string.split(s, separator)
 	if separator == nil then
 		separator = "%s+"
@@ -118,17 +129,6 @@ function string.split(s, separator)
 	end
 	table.insert(result, s)
 	return result
-end
-function string.escape(s)
-	local result = {}
-	for _, part in ipairs(string.split(s, "%%%%")) do
-		part = part:gsub("^([().*?[^$+-])", "%%%1")
-		part = part:gsub("([^%%])([().*?[^$+-])", "%1%%%2")
-		part = part:gsub("%%([^%%().*?[^$+-])", "%%%%%1")
-		part = part:gsub("%%$", "%%%%")
-		table.insert(result, part)
-	end
-	return table.concat(result, "%%")
 end
 function string.trim(s, pattern)
 	if pattern == nil then
