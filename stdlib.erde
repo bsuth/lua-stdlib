@@ -311,7 +311,7 @@ function table.reverse(t) {
   }
 }
 
-function table.slice(t, i = 0, j = #t) {
+function table.slice(t, i = 1, j = #t) {
   local result, len = {}, #t
 
   if i < 0 { i = i + len + 1 }

@@ -255,7 +255,7 @@ function table.reverse(t)
 end
 function table.slice(t, i, j)
 	if i == nil then
-		i = 0
+		i = 1
 	end
 	if j == nil then
 		j = #t
