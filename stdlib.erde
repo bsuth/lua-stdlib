@@ -167,12 +167,12 @@ function string.escape(s) {
 
 function string.split(s, separator = '%s+') {
   local result = {}
-  local start, end = s:find(separator)
+  local i, j = s:find(separator)
 
-  while start != nil {
-    table.insert(result, s:sub(1, start - 1))
-    s = s:sub(end + 1) || ''
-    start, end = s:find(separator)
+  while i != nil {
+    table.insert(result, s:sub(1, i - 1))
+    s = s:sub(j + 1) || ''
+    i, j = s:find(separator)
   }
 
   table.insert(result, s)
@@ -311,13 +311,13 @@ function table.reverse(t) {
   }
 }
 
-function table.slice(t, start = 0, end = #t) {
+function table.slice(t, i = 0, j = #t) {
   local result, len = {}, #t
 
-  if start < 0 { start = start + len + 1 }
-  if end < 0 { end = end + len + 1 }
+  if i < 0 { i = i + len + 1 }
+  if j < 0 { j = j + len + 1 }
 
-  for i = math.max(start, 0), math.min(end, len) {
+  for i = math.max(i, 0), math.min(j, len) {
     table.insert(result, t[i])
   }
 

@@ -132,11 +132,11 @@ function string.split(s, separator)
 		separator = "%s+"
 	end
 	local result = {}
-	local start, __ERDE_SUBSTITUTE_end__ = s:find(separator)
-	while start ~= nil do
-		table.insert(result, s:sub(1, start - 1))
-		s = s:sub(__ERDE_SUBSTITUTE_end__ + 1) or ""
-		start, __ERDE_SUBSTITUTE_end__ = s:find(separator)
+	local i, j = s:find(separator)
+	while i ~= nil do
+		table.insert(result, s:sub(1, i - 1))
+		s = s:sub(j + 1) or ""
+		i, j = s:find(separator)
 	end
 	table.insert(result, s)
 	return result
@@ -253,21 +253,21 @@ function table.reverse(t)
 		t[i], t[len - i + 1] = t[len - i + 1], t[i]
 	end
 end
-function table.slice(t, start, __ERDE_SUBSTITUTE_end__)
-	if start == nil then
-		start = 0
+function table.slice(t, i, j)
+	if i == nil then
+		i = 0
 	end
-	if __ERDE_SUBSTITUTE_end__ == nil then
-		__ERDE_SUBSTITUTE_end__ = #t
+	if j == nil then
+		j = #t
 	end
 	local result, len = {}, #t
-	if start < 0 then
-		start = start + len + 1
+	if i < 0 then
+		i = i + len + 1
 	end
-	if __ERDE_SUBSTITUTE_end__ < 0 then
-		__ERDE_SUBSTITUTE_end__ = __ERDE_SUBSTITUTE_end__ + len + 1
+	if j < 0 then
+		j = j + len + 1
 	end
-	for i = math.max(start, 0), math.min(__ERDE_SUBSTITUTE_end__, len) do
+	for i = math.max(i, 0), math.min(j, len) do
 		table.insert(result, t[i])
 	end
 	return result
