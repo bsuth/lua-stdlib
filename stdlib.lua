@@ -80,7 +80,18 @@ function math.product(...)
 	return result
 end
 function math.round(x)
-	return math.floor(x + 0.5)
+	if x < 0 then
+		return math.ceil(x - 0.5)
+	else
+		return math.floor(x + 0.5)
+	end
+end
+function math.sign(x)
+	if x < 0 then
+		return -1
+	else
+		return 1
+	end
 end
 function math.sum(...)
 	local summands = { ... }

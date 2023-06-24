@@ -105,7 +105,19 @@ function math.product(...multiplicands) {
 }
 
 function math.round(x) {
-  return math.floor(x + 0.5)
+  if x < 0 {
+    return math.ceil(x - 0.5)
+  } else {
+    return math.floor(x + 0.5)
+  }
+}
+
+function math.sign(x) {
+  if x < 0 {
+    return -1
+  } else {
+    return 1
+  }
 }
 
 function math.sum(...summands) {
