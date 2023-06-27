@@ -147,14 +147,6 @@ spec('math.clamp', () -> {
   assert.are.equal(1, stdlib.math.clamp(1.5, 0, 1))
 })
 
-spec('math.product', () -> {
-  assert.are.equal(1, stdlib.math.product())
-  assert.are.equal(0, stdlib.math.product(0))
-  assert.are.equal(1, stdlib.math.product(1))
-  assert.are.equal(24, stdlib.math.product(1, 2, 3, 4))
-  assert.are.equal(-6, stdlib.math.product(1, -2, 3))
-})
-
 spec('math.round', () -> {
   assert.are.equal(-1, stdlib.math.round(-1))
   assert.are.equal(-1, stdlib.math.round(-0.9))
@@ -177,14 +169,6 @@ spec('math.sign', () -> {
   assert.are.equal(0, stdlib.math.sign(0))
   assert.are.equal(1, stdlib.math.sign(1))
   assert.are.equal(1, stdlib.math.sign(4))
-})
-
-spec('math.sum', () -> {
-  assert.are.equal(0, stdlib.math.sum())
-  assert.are.equal(0, stdlib.math.sum(0))
-  assert.are.equal(1, stdlib.math.sum(1))
-  assert.are.equal(10, stdlib.math.sum(1, 2, 3, 4))
-  assert.are.equal(-2, stdlib.math.sum(1, -2, 3, -4))
 })
 
 -- -----------------------------------------------------------------------------

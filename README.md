@@ -114,10 +114,8 @@ print(string.trim) -- nil
 - [`io`](#io)
 - [`math`](#math)
     - [`math.clamp(x, min, max)`](#math.clampx-min-max)
-    - [`math.product(...)`](#math.product)
     - [`math.round(x)`](#math.roundx)
     - [`math.sign(x)`](#math.signx)
-    - [`math.sum(...)`](#math.sum)
 - [`os`](#os)
 - [`package`](#package)
 - [`string`](#string)
@@ -222,10 +220,8 @@ local math = require('stdlib').math
 ```
 
 - [`math.clamp(x, min, max)`](#math.clampx-min-max)
-- [`math.product(...)`](#math.product)
 - [`math.round(x)`](#math.roundx)
 - [`math.sign(x)`](#math.signx)
-- [`math.sum(...)`](#math.sum)
 
 #### `math.clamp(x, min, max)`
 
@@ -237,18 +233,6 @@ local math = require('stdlib').math
 print(math.clamp(2, 1, 3) -- 2
 print(math.clamp(0, 1, 3) -- 1
 print(math.clamp(4, 1, 3) -- 3
-```
-
-#### `math.product(...)`
-
-Returns the product of all given arguments.
-
-```lua
-local math = require('stdlib').math
-
-print(math.product(0, 10, 10) -- 0
-print(math.product(1, 2, 3) -- 6
-print(math.product(5, 4) -- 20
 ```
 
 #### `math.round(x)`
@@ -268,26 +252,14 @@ print(math.round(-0.5) -- -1
 
 #### `math.sign(x)`
 
-Returns -1 if x is negative, otherwise 1.
+Returns -1 if x is negative, 1 if x is positive, and otherwise 0.
 
 ```lua
 local math = require('stdlib').math
 
 print(math.sign(-4) -- -1
-print(math.sign(0) -- 1
+print(math.sign(0) -- 0
 print(math.sign(9) -- 1
-```
-
-#### `math.sum(...)`
-
-Returns the sum of all given arguments.
-
-```lua
-local math = require('stdlib').math
-
-print(math.sum(0, 10, 10) -- 20
-print(math.sum(1, 2, 3) -- 6
-print(math.sum(5, 4) -- 9
 ```
 
 ## `os`

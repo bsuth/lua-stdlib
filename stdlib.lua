@@ -71,14 +71,6 @@ _MODULE.math = math
 function math.clamp(x, min, max)
 	return math.min(math.max(x, min), max)
 end
-function math.product(...)
-	local multiplicands = { ... }
-	local result = 1
-	for i, multiplicand in ipairs(multiplicands) do
-		result = result * multiplicand
-	end
-	return result
-end
 function math.round(x)
 	if x < 0 then
 		return math.ceil(x - 0.5)
@@ -94,14 +86,6 @@ function math.sign(x)
 	else
 		return 0
 	end
-end
-function math.sum(...)
-	local summands = { ... }
-	local result = 0
-	for i, summand in ipairs(summands) do
-		result = result + summand
-	end
-	return result
 end
 local _native_os = os
 local os = setmetatable({}, {
