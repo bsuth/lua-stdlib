@@ -128,14 +128,13 @@ print(string.trim) -- nil
     - [`string.split(s, separator = '%s+')`](#stringsplits-separator--s)
     - [`string.trim(s, pattern = '%s+')`](#stringtrims-pattern--s)
 - [`table`](#table)
-    - [`table.assign(t, ...)`](#tableassignt-)
     - [`table.deepcopy(t)`](#tabledeepcopyt)
-    - [`table.default(t, ...)`](#tabledefaultt-)
     - [`table.empty(t)`](#tableemptyt)
     - [`table.filter(t, callback)`](#tablefiltert-callback)
     - [`table.find(t, callback)`](#tablefindt-callback)
     - [`table.keys(t)`](#tablekeyst)
     - [`table.map(t, callback)`](#tablemapt-callback)
+    - [`table.merge(t, ...)`](#tablemerget-)
     - [`table.pack(...)`](#tablepack)
     - [`table.reduce(t, result, callback)`](#tablereducet-result-callback)
     - [`table.reverse(t)`](#tablereverset)
@@ -414,14 +413,13 @@ Extension of [Lua's native `table` library](https://www.lua.org/manual/5.1/manua
 local table = require('stdlib').table
 ```
 
-- [`table.assign(t, ...)`](#tableassignt-)
 - [`table.deepcopy(t)`](#tabledeepcopyt)
-- [`table.default(t, ...)`](#tabledefaultt-)
 - [`table.empty(t)`](#tableemptyt)
 - [`table.filter(t, callback)`](#tablefiltert-callback)
 - [`table.find(t, callback)`](#tablefindt-callback)
 - [`table.keys(t)`](#tablekeyst)
 - [`table.map(t, callback)`](#tablemapt-callback)
+- [`table.merge(t, ...)`](#tablemerget-)
 - [`table.pack(...)`](#tablepack)
 - [`table.reduce(t, result, callback)`](#tablereducet-result-callback)
 - [`table.reverse(t)`](#tablereverset)
@@ -429,21 +427,6 @@ local table = require('stdlib').table
 - [`table.slice(t, i = 1, j = #t)`](#tableslicet-i--1-j--t)
 - [`table.unpack(t, i = 1, j = #t)`](#tableunpackt-i--1-j--t)
 - [`table.values(t)`](#tablevaluest)
-
-#### `table.assign(t, ...)`
-
-Accepts tables as varargs and copies all of their fields into `t'. Note that
-array elements are _not_ copied.
-
-```lua
-local table = require('stdlib').table
-
-local t = { a = 'hi' }
-
-table.assign(t, { b = 'bye' }, { a = 'bye' })
-
-print(t) -- { a = 'bye', b = 'bye' }
-```
 
 #### `table.deepcopy(t)`
 
@@ -460,21 +443,6 @@ print(clone) -- { a = {} }
 
 print(t == clone) -- false
 print(t.a == clone.a) -- false
-```
-
-#### `table.default(t, ...)`
-
-Accepts tables as varargs and copies all of their fields into `t`, but only if
-their is no such field already in `t`. Note that array elements are _not_ copied.
-
-```lua
-local table = require('stdlib').table
-
-local t = { a = 'hi' }
-
-table.default(t, { b = 'bye' }, { a = 'bye' })
-
-print(t) -- { a = 'hi', b = 'bye' }
 ```
 
 #### `table.empty(t)`
@@ -573,6 +541,21 @@ local mapped = table.map(t, function(value, key)
 end)
 
 print(mapped) -- { 15, 25, A = 'hello', B = 'world' }
+```
+
+#### `table.merge(t, ...)`
+
+Accepts tables as varargs and for each such table, copies all fields and appends
+all array elements into `t`.
+
+```lua
+local table = require('stdlib').table
+
+local t = { a = 'hi' }
+
+table.merge(t, { b = 'bye' }, { a = 'bye' }, { 10, 20, 30 })
+
+print(t) -- { a = 'bye', b = 'bye', 10, 20, 30 }
 ```
 
 #### `table.pack(...)`

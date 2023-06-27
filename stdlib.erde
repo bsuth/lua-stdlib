@@ -201,16 +201,6 @@ if _VERSION == 'Lua 5.1' {
   table.unpack = unpack
 }
 
-function table.assign(t, ...) {
-  for _, _t in pairs({ ... }) {
-    for key, value in pairs(_t) {
-      if type(key) == 'string' {
-        t[key] = value
-      }
-    }
-  }
-}
-
 function table.deepcopy(t) {
   local result = {}
 
@@ -223,16 +213,6 @@ function table.deepcopy(t) {
   }
 
   return result
-}
-
-function table.default(t, ...) {
-  for _, _t in pairs({ ... }) {
-    for key, value in pairs(_t) {
-      if type(key) == 'string' && t[key] == nil {
-        t[key] = value
-      }
-    }
-  }
 }
 
 function table.empty(t) {
@@ -297,6 +277,18 @@ function table.map(t, callback) {
   }
 
   return result
+}
+
+function table.merge(t, ...) {
+  for _, _t in pairs({ ... }) {
+    for key, value in pairs(_t) {
+      if type(key) == 'number' {
+        table.insert(t, value)
+      } else {
+        t[key] = value
+      }
+    }
+  }
 }
 
 function table.reduce(t, result, callback) {

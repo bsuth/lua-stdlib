@@ -178,17 +178,6 @@ if _VERSION == "Lua 5.1" then
 	end
 	table.unpack = unpack
 end
-function table.assign(t, ...)
-	for _, _t in pairs({
-		...,
-	}) do
-		for key, value in pairs(_t) do
-			if type(key) == "string" then
-				t[key] = value
-			end
-		end
-	end
-end
 function table.deepcopy(t)
 	local result = {}
 	for key, value in pairs(t) do
@@ -199,17 +188,6 @@ function table.deepcopy(t)
 		end
 	end
 	return result
-end
-function table.default(t, ...)
-	for _, _t in pairs({
-		...,
-	}) do
-		for key, value in pairs(_t) do
-			if type(key) == "string" and t[key] == nil then
-				t[key] = value
-			end
-		end
-	end
 end
 function table.empty(t)
 	return next(t) == nil
@@ -262,6 +240,19 @@ function table.map(t, callback)
 		end
 	end
 	return result
+end
+function table.merge(t, ...)
+	for _, _t in pairs({
+		...,
+	}) do
+		for key, value in pairs(_t) do
+			if type(key) == "number" then
+				table.insert(t, value)
+			else
+				t[key] = value
+			end
+		end
+	end
 end
 function table.reduce(t, result, callback)
 	for key, value in pairs(t) do

@@ -444,23 +444,6 @@ spec('table', () -> {
   }
 })
 
-spec('table.assign', () -> {
-  local function assert_assign(expected, target, ...) {
-    stdlib.table.assign(target, ...)
-    assert.are.same(expected, target)
-  }
-
-  assert_assign({}, {})
-  assert_assign({ a = 1 }, {}, { a = 1 })
-  assert_assign({ a = 2 }, {}, { a = 1 }, { a = 2 })
-  assert_assign({ a = 1, b = 2 }, {}, { a = 1 }, { b = 2 })
-  assert_assign({ a = 2 }, { a = 1 }, { a = 2 })
-  assert_assign({ a = 1, b = 2 }, { a = 1 }, { b = 2 })
-  assert_assign({ a = 1, b = 2, c = 3 }, { a = 1, c = 3 }, { b = 2 })
-  assert_assign({ 1 }, { 1 })
-  assert_assign({}, {}, { 1 })
-})
-
 spec('table.deepcopy', () -> {
   local function assert_deepcopy(t, copy = stdlib.table.deepcopy(t)) {
     assert.are_not.equal(t, copy)
@@ -481,23 +464,6 @@ spec('table.deepcopy', () -> {
   assert_deepcopy({ { 'hello' } })
   assert_deepcopy({ a = { 'hello' } })
   assert_deepcopy({ a = { 'hello' }, { 'world' } })
-})
-
-spec('table.default', () -> {
-  local function assert_default(expected, target, ...) {
-    stdlib.table.default(target, ...)
-    assert.are.same(expected, target)
-  }
-
-  assert_default({}, {})
-  assert_default({ a = 1 }, {}, { a = 1 })
-  assert_default({ a = 1 }, {}, { a = 1 }, { a = 2 })
-  assert_default({ a = 1, b = 2 }, {}, { a = 1 }, { b = 2 })
-  assert_default({ a = 1 }, { a = 1 }, { a = 2 })
-  assert_default({ a = 1, b = 2 }, { a = 1 }, { b = 2 })
-  assert_default({ a = 1, b = 2, c = 3 }, { a = 1, c = 3 }, { b = 2 })
-  assert_default({ 1 }, { 1 })
-  assert_default({}, {}, { 1 })
 })
 
 spec('table.empty', () -> {
@@ -574,6 +540,28 @@ spec('table.map', () -> {
   assert.are.same({ a = 10 }, stdlib.table.map({ 1 }, value -> (10 * value, 'a')))
   assert.are.same({ 10 }, stdlib.table.map({ a = 1 }, value -> (10 * value, 1)))
   assert.are.same({ b = 10 }, stdlib.table.map({ a = 10 }, value -> (value, 'b')))
+})
+
+spec('table.merge', () -> {
+  local function assert_merge(expected, target, ...) {
+    stdlib.table.merge(target, ...)
+    assert.are.same(expected, target)
+  }
+
+  assert_merge({}, {})
+
+  assert_merge({ a = 1 }, {}, { a = 1 })
+  assert_merge({ a = 2 }, {}, { a = 1 }, { a = 2 })
+  assert_merge({ a = 1, b = 2 }, {}, { a = 1 }, { b = 2 })
+  assert_merge({ a = 2 }, { a = 1 }, { a = 2 })
+  assert_merge({ a = 1, b = 2 }, { a = 1 }, { b = 2 })
+  assert_merge({ a = 1, b = 2, c = 3 }, { a = 1, c = 3 }, { b = 2 })
+
+  assert_merge({ 10 }, { 10 })
+  assert_merge({ 10 }, {}, { 10 })
+  assert_merge({ 10, 20, 30 }, { 10, 20 }, { 30 })
+  assert_merge({ 10, 20, 30 }, { 10, 20 }, {}, { 30 })
+  assert_merge({ 10, 20, 30 }, { 10 }, { 20 }, { 30 })
 })
 
 spec('table.reduce', () -> {
