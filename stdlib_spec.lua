@@ -430,100 +430,51 @@ spec("table.assign", function()
 		1,
 	})
 end)
-spec("table.clone", function()
-	local function assert_clone(t, clone)
-		if clone == nil then
-			clone = stdlib.table.clone(t)
+spec("table.deepcopy", function()
+	local function assert_deepcopy(t, copy)
+		if copy == nil then
+			copy = stdlib.table.deepcopy(t)
 		end
-		assert.are_not.equal(t, clone)
-		assert.are.same(t, clone)
-		for key, value in pairs(t) do
-			if type(value) == "stdlib.table" then
-				assert_clone(value, clone[key])
-			end
-		end
-	end
-	assert_clone({})
-	assert_clone({
-		1,
-		2,
-		3,
-	})
-	assert_clone({
-		a = 1,
-		b = 2,
-		c = 3,
-	})
-	assert_clone({
-		a = 1,
-		"hello",
-	})
-	assert_clone({
-		a = 1,
-		b = 2,
-		"hello",
-		"world",
-	})
-	assert_clone({
-		{
-			"hello",
-		},
-	})
-	assert_clone({
-		a = {
-			"hello",
-		},
-	})
-	assert_clone({
-		a = {
-			"hello",
-		},
-		{
-			"world",
-		},
-	})
-end)
-spec("table.copy", function()
-	local function assert_copy(t)
-		local copy = stdlib.table.copy(t)
 		assert.are_not.equal(t, copy)
 		assert.are.same(t, copy)
 		for key, value in pairs(t) do
-			assert.are.equal(value, copy[key])
+			if type(value) == "table" then
+				assert_deepcopy(value, copy[key])
+			end
 		end
 	end
-	assert_copy({})
-	assert_copy({
+	assert_deepcopy({})
+	assert_deepcopy({
 		1,
 		2,
 		3,
 	})
-	assert_copy({
+	assert_deepcopy({
 		a = 1,
 		b = 2,
 		c = 3,
 	})
-	assert_copy({
+	assert_deepcopy({
 		a = 1,
 		"hello",
 	})
-	assert_copy({
+	assert_deepcopy({
 		a = 1,
 		b = 2,
 		"hello",
 		"world",
 	})
-	assert_copy({
+	assert_deepcopy({
 		{
 			"hello",
 		},
 	})
-	assert_copy({
+	assert_deepcopy({
 		a = {
 			"hello",
 		},
 	})
-	assert_copy({
+	assert_deepcopy({
 		a = {
 			"hello",
 		},
@@ -1016,6 +967,55 @@ spec("table.pack", function()
 	else
 		assert.is_nil(rawget(stdlib.table, "pack"))
 	end
+end)
+spec("table.shallowcopy", function()
+	local function assert_shallowcopy(t)
+		local copy = stdlib.table.shallowcopy(t)
+		assert.are_not.equal(t, copy)
+		assert.are.same(t, copy)
+		for key, value in pairs(t) do
+			assert.are.equal(value, copy[key])
+		end
+	end
+	assert_shallowcopy({})
+	assert_shallowcopy({
+		1,
+		2,
+		3,
+	})
+	assert_shallowcopy({
+		a = 1,
+		b = 2,
+		c = 3,
+	})
+	assert_shallowcopy({
+		a = 1,
+		"hello",
+	})
+	assert_shallowcopy({
+		a = 1,
+		b = 2,
+		"hello",
+		"world",
+	})
+	assert_shallowcopy({
+		{
+			"hello",
+		},
+	})
+	assert_shallowcopy({
+		a = {
+			"hello",
+		},
+	})
+	assert_shallowcopy({
+		a = {
+			"hello",
+		},
+		{
+			"world",
+		},
+	})
 end)
 spec("table.slice", function()
 	assert.are.same({}, stdlib.table.slice({}))

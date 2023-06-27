@@ -211,25 +211,15 @@ function table.assign(t, ...) {
   }
 }
 
-function table.clone(t) {
+function table.deepcopy(t) {
   local result = {}
 
   for key, value in pairs(t) {
     if type(value) == 'table' {
-      result[key] = table.clone(value)
+      result[key] = table.deepcopy(value)
     } else {
       result[key] = value
     }
-  }
-
-  return result
-}
-
-function table.copy(t) {
-  local result = {}
-
-  for key, value in pairs(t) {
-    result[key] = value
   }
 
   return result
@@ -319,6 +309,16 @@ function table.reverse(t) {
   for i = 1, math.floor(len / 2) {
     t[i], t[len - i + 1] = t[len - i + 1], t[i]
   }
+}
+
+function table.shallowcopy(t) {
+  local result = {}
+
+  for key, value in pairs(t) {
+    result[key] = value
+  }
+
+  return result
 }
 
 function table.slice(t, i = 1, j = #t) {

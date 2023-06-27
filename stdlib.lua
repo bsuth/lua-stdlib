@@ -189,21 +189,14 @@ function table.assign(t, ...)
 		end
 	end
 end
-function table.clone(t)
+function table.deepcopy(t)
 	local result = {}
 	for key, value in pairs(t) do
 		if type(value) == "table" then
-			result[key] = table.clone(value)
+			result[key] = table.deepcopy(value)
 		else
 			result[key] = value
 		end
-	end
-	return result
-end
-function table.copy(t)
-	local result = {}
-	for key, value in pairs(t) do
-		result[key] = value
 	end
 	return result
 end
@@ -278,6 +271,13 @@ function table.reverse(t)
 	for i = 1, math.floor(len / 2) do
 		t[i], t[len - i + 1] = t[len - i + 1], t[i]
 	end
+end
+function table.shallowcopy(t)
+	local result = {}
+	for key, value in pairs(t) do
+		result[key] = value
+	end
+	return result
 end
 function table.slice(t, i, j)
 	if i == nil then

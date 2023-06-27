@@ -129,8 +129,7 @@ print(string.trim) -- nil
     - [`string.trim(s, pattern = '%s+')`](#stringtrims-pattern--s)
 - [`table`](#table)
     - [`table.assign(t, ...)`](#tableassignt-)
-    - [`table.clone(t)`](#tableclonet)
-    - [`table.copy(t)`](#tablecopyt)
+    - [`table.deepcopy(t)`](#tabledeepcopyt)
     - [`table.default(t, ...)`](#tabledefaultt-)
     - [`table.filter(t, callback)`](#tablefiltert-callback)
     - [`table.find(t, callback)`](#tablefindt-callback)
@@ -139,6 +138,7 @@ print(string.trim) -- nil
     - [`table.pack(...)`](#tablepack)
     - [`table.reduce(t, result, callback)`](#tablereducet-result-callback)
     - [`table.reverse(t)`](#tablereverset)
+    - [`table.shallowcopy(t)`](#tableshallowcopyt)
     - [`table.slice(t, i = 1, j = #t)`](#tableslicet-i--1-j--t)
     - [`table.unpack(t, i = 1, j = #t)`](#tableunpackt-i--1-j--t)
     - [`table.values(t)`](#tablevaluest)
@@ -414,8 +414,7 @@ local table = require('stdlib').table
 ```
 
 - [`table.assign(t, ...)`](#tableassignt-)
-- [`table.clone(t)`](#tableclonet)
-- [`table.copy(t)`](#tablecopyt)
+- [`table.deepcopy(t)`](#tabledeepcopyt)
 - [`table.default(t, ...)`](#tabledefaultt-)
 - [`table.filter(t, callback)`](#tablefiltert-callback)
 - [`table.find(t, callback)`](#tablefindt-callback)
@@ -424,6 +423,7 @@ local table = require('stdlib').table
 - [`table.pack(...)`](#tablepack)
 - [`table.reduce(t, result, callback)`](#tablereducet-result-callback)
 - [`table.reverse(t)`](#tablereverset)
+- [`table.shallowcopy(t)`](#tableshallowcopyt)
 - [`table.slice(t, i = 1, j = #t)`](#tableslicet-i--1-j--t)
 - [`table.unpack(t, i = 1, j = #t)`](#tableunpackt-i--1-j--t)
 - [`table.values(t)`](#tablevaluest)
@@ -443,7 +443,7 @@ table.assign(t, { b = 'bye' }, { a = 'bye' })
 print(t) -- { a = 'bye', b = 'bye' }
 ```
 
-#### `table.clone(t)`
+#### `table.deepcopy(t)`
 
 Returns a deep copy of t.
 
@@ -451,30 +451,13 @@ Returns a deep copy of t.
 local table = require('stdlib').table
 
 local t = { a = {} }
-local clone = table.clone(t)
+local copy = table.deepcopy(t)
 
 print(t) -- { a = {} }
 print(clone) -- { a = {} }
 
 print(t == clone) -- false
 print(t.a == clone.a) -- false
-```
-
-#### `table.copy(t)`
-
-Returns a shallow copy of t.
-
-```lua
-local table = require('stdlib').table
-
-local t = { a = {} }
-local copy = table.copy(t)
-
-print(t) -- { a = {} }
-print(copy) -- { a = {} }
-
-print(t == copy) -- false
-print(t.a == copy.a) -- true
 ```
 
 #### `table.default(t, ...)`
@@ -612,6 +595,23 @@ local t = { 10, 20, 30, 40 }
 table.reverse(t)
 
 print(t) -- { 40, 30, 20, 10 }
+```
+
+#### `table.shallowcopy(t)`
+
+Returns a shallow copy of t.
+
+```lua
+local table = require('stdlib').table
+
+local t = { a = {} }
+local copy = table.shallowcopy(t)
+
+print(t) -- { a = {} }
+print(copy) -- { a = {} }
+
+print(t == copy) -- false
+print(t.a == copy.a) -- true
 ```
 
 #### `table.slice(t, i = 1, j = #t)`
