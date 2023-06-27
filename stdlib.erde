@@ -235,6 +235,10 @@ function table.default(t, ...) {
   }
 }
 
+function table.empty(t) {
+  return next(t) == nil
+}
+
 function table.filter(t, callback) {
   local result = {}
 

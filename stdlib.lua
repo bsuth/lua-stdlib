@@ -211,6 +211,9 @@ function table.default(t, ...)
 		end
 	end
 end
+function table.empty(t)
+	return next(t) == nil
+end
 function table.filter(t, callback)
 	local result = {}
 	for key, value in pairs(t) do

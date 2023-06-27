@@ -131,6 +131,7 @@ print(string.trim) -- nil
     - [`table.assign(t, ...)`](#tableassignt-)
     - [`table.deepcopy(t)`](#tabledeepcopyt)
     - [`table.default(t, ...)`](#tabledefaultt-)
+    - [`table.empty(t)`](#tableemptyt)
     - [`table.filter(t, callback)`](#tablefiltert-callback)
     - [`table.find(t, callback)`](#tablefindt-callback)
     - [`table.keys(t)`](#tablekeyst)
@@ -416,6 +417,7 @@ local table = require('stdlib').table
 - [`table.assign(t, ...)`](#tableassignt-)
 - [`table.deepcopy(t)`](#tabledeepcopyt)
 - [`table.default(t, ...)`](#tabledefaultt-)
+- [`table.empty(t)`](#tableemptyt)
 - [`table.filter(t, callback)`](#tablefiltert-callback)
 - [`table.find(t, callback)`](#tablefindt-callback)
 - [`table.keys(t)`](#tablekeyst)
@@ -473,6 +475,19 @@ local t = { a = 'hi' }
 table.default(t, { b = 'bye' }, { a = 'bye' })
 
 print(t) -- { a = 'hi', b = 'bye' }
+```
+
+#### `table.empty(t)`
+
+Returns true if the table is empty (i.e. `pairs` yields no iterations),
+otherwise false
+
+```lua
+local table = require('stdlib').table
+
+print(table.empty({})) -- true
+print(table.empty({ mykey = 1 })) -- false
+print(table.empty({ 10, 20, 30 })) -- false
 ```
 
 #### `table.filter(t, callback)`

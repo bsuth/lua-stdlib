@@ -500,6 +500,15 @@ spec('table.default', () -> {
   assert_default({}, {}, { 1 })
 })
 
+spec('table.empty', () -> {
+  assert.are.equal(true, stdlib.table.empty({}))
+  assert.are.equal(true, stdlib.table.empty({ nil }))
+  assert.are.equal(true, stdlib.table.empty({ a = nil }))
+
+  assert.are.equal(false, stdlib.table.empty({ a = 1 }))
+  assert.are.equal(false, stdlib.table.empty({ 1 }))
+})
+
 spec('table.filter', () -> {
   assert.are.same({}, stdlib.table.filter({}, () -> false))
   assert.are.same({}, stdlib.table.filter({}, () -> true))

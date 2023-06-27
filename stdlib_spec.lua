@@ -543,6 +543,33 @@ spec("table.default", function()
 		1,
 	})
 end)
+spec("table.empty", function()
+	assert.are.equal(true, stdlib.table.empty({}))
+	assert.are.equal(
+		true,
+		stdlib.table.empty({
+			nil,
+		})
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.empty({
+			a = nil,
+		})
+	)
+	assert.are.equal(
+		false,
+		stdlib.table.empty({
+			a = 1,
+		})
+	)
+	assert.are.equal(
+		false,
+		stdlib.table.empty({
+			1,
+		})
+	)
+end)
 spec("table.filter", function()
 	assert.are.same(
 		{},
