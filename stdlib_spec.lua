@@ -1,4 +1,8 @@
 local stdlib = require("stdlib")
+if _VERSION == "Lua 5.1" then
+	table.pack = nil
+	table.unpack = nil
+end
 local function any_sort(a, b)
 	if type(a) == type(b) then
 		return a < b
@@ -994,6 +998,25 @@ spec("table.reverse", function()
 		d = true,
 	})
 end)
+spec("table.pack", function()
+	if _VERSION == "Lua 5.1" then
+		assert.are.same({
+			n = 0,
+		}, stdlib.table.pack())
+		assert.are.same({
+			n = 1,
+			10,
+		}, stdlib.table.pack(10))
+		assert.are.same({
+			n = 3,
+			10,
+			30,
+			20,
+		}, stdlib.table.pack(10, 30, 20))
+	else
+		assert.is_nil(rawget(stdlib.table, "pack"))
+	end
+end)
 spec("table.slice", function()
 	assert.are.same({}, stdlib.table.slice({}))
 	assert.are.same(
@@ -1178,6 +1201,13 @@ spec("table.slice", function()
 			"c",
 		}, 4)
 	)
+end)
+spec("table.unpack", function()
+	if _VERSION == "Lua 5.1" then
+		assert.are.equal(unpack, stdlib.table.unpack)
+	else
+		assert.is_nil(rawget(stdlib.table, "unpack"))
+	end
 end)
 spec("table.values", function()
 	local function assert_values(expected, t)

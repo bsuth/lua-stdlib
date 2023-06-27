@@ -136,9 +136,11 @@ print(string.trim) -- nil
     - [`table.find(t, callback)`](#table.findt-callback)
     - [`table.keys(t)`](#table.keyst)
     - [`table.map(t, callback)`](#table.mapt-callback)
+    - [`table.pack(...)`](#table.pack)
     - [`table.reduce(t, result, callback)`](#table.reducet-result-callback)
     - [`table.reverse(t)`](#table.reverset)
     - [`table.slice(t, i = 1, j = #t)`](#table.slicet-i-j)
+    - [`table.unpack(t, i = 1, j = #t)`](#table.unpackt-i-j)
     - [`table.values(t)`](#table.valuest)
 
 ## Top Level Functions
@@ -419,9 +421,11 @@ local table = require('stdlib').table
 - [`table.find(t, callback)`](#table.findt-callback)
 - [`table.keys(t)`](#table.keyst)
 - [`table.map(t, callback)`](#table.mapt-callback)
+- [`table.pack(...)`](#table.pack)
 - [`table.reduce(t, result, callback)`](#table.reducet-result-callback)
 - [`table.reverse(t)`](#table.reverset)
 - [`table.slice(t, i = 1, j = #t)`](#table.slicet-i-j)
+- [`table.unpack(t, i = 1, j = #t)`](#table.unpackt-i-j)
 - [`table.values(t)`](#table.valuest)
 
 #### `table.assign(t, ...)`
@@ -573,6 +577,11 @@ end)
 print(mapped) -- { 15, 25, A = 'hello', B = 'world' }
 ```
 
+#### `table.pack(...)`
+
+Polyfill for the Lua 5.2+ [`table.pack`](https://www.lua.org/manual/5.2/manual.html#pdf-table.pack)
+function. This field only exists if `_VERSION` is `Lua 5.1`.
+
 #### `table.reduce(t, result, callback)`
 
 Accepts an initial value `result`, and a callback that takes `(result, value, key)`
@@ -623,6 +632,12 @@ print(table.slice(t, 2, 3)) -- { 20, 30 }
 
 print(table.slice(t, -2)) -- { 30, 40 }
 ```
+
+#### `table.unpack(t, i = 1, j = #t)`
+
+Simply an alias for the Lua 5.1 [`unpack`](https://www.lua.org/manual/5.1/manual.html#pdf-unpack)
+builtin. This field only exists if `_VERSION` is `Lua 5.1`. Note that this is
+equivalent in behavior to the Lua 5.2+ [`table.unpack`](https://www.lua.org/manual/5.2/manual.html#pdf-table.unpack).
 
 #### `table.values(t)`
 

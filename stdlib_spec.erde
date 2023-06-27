@@ -1,5 +1,13 @@
 local stdlib = require('stdlib')
 
+-- busted loads penlight's `compat` module, which injects its own `table.pack`
+-- and `table.unpack` polyfills. We unset them here to make sure they don't
+-- interfere with our tests.
+if _VERSION == 'Lua 5.1' {
+  table.pack = nil
+  table.unpack = nil
+}
+
 -- -----------------------------------------------------------------------------
 -- Helpers
 -- -----------------------------------------------------------------------------
@@ -102,7 +110,7 @@ spec('kpairs', () -> {
 
 spec('coroutine', () -> {
   assert.is_table(stdlib.coroutine)
-  for key in pairs(coroutine) {
+  for key in pairs(coroutine) { -- make sure we are not overriding native methods
     assert.are.equal(coroutine[key], stdlib.coroutine[key])
   }
 })
@@ -113,7 +121,7 @@ spec('coroutine', () -> {
 
 spec('debug', () -> {
   assert.is_table(stdlib.debug)
-  for key in pairs(debug) {
+  for key in pairs(debug) { -- make sure we are not overriding native methods
     assert.are.equal(debug[key], stdlib.debug[key])
   }
 })
@@ -124,7 +132,7 @@ spec('debug', () -> {
 
 spec('io', () -> {
   assert.is_table(stdlib.io)
-  for key in pairs(io) {
+  for key in pairs(io) { -- make sure we are not overriding native methods
     assert.are.equal(io[key], stdlib.io[key])
   }
 })
@@ -135,7 +143,7 @@ spec('io', () -> {
 
 spec('math', () -> {
   assert.is_table(stdlib.math)
-  for key in pairs(math) {
+  for key in pairs(math) { -- make sure we are not overriding native methods
     assert.are.equal(math[key], stdlib.math[key])
   }
 })
@@ -177,7 +185,7 @@ spec('math.sign', () -> {
 
 spec('os', () -> {
   assert.is_table(stdlib.os)
-  for key in pairs(os) {
+  for key in pairs(os) { -- make sure we are not overriding native methods
     assert.are.equal(os[key], stdlib.os[key])
   }
 })
@@ -188,7 +196,7 @@ spec('os', () -> {
 
 spec('package', () -> {
   assert.is_table(stdlib.package)
-  for key in pairs(package) {
+  for key in pairs(package) { -- make sure we are not overriding native methods
     assert.are.equal(package[key], stdlib.package[key])
   }
 })
@@ -199,7 +207,7 @@ spec('package', () -> {
 
 spec('string', () -> {
   assert.is_table(stdlib.string)
-  for key in pairs(string) {
+  for key in pairs(string) { -- make sure we are not overriding native methods
     assert.are.equal(string[key], stdlib.string[key])
   }
 })
@@ -431,7 +439,7 @@ spec('string.trim', () -> {
 
 spec('table', () -> {
   assert.is_table(stdlib.table)
-  for key in pairs(table) {
+  for key in pairs(table) { -- make sure we are not overriding native methods
     assert.are.equal(table[key], stdlib.table[key])
   }
 })
@@ -601,6 +609,16 @@ spec('table.reverse', () -> {
   assert_reverse({ 'c', 'b', 'a', d = true }, { 'a', 'b', 'c', d = true })
 })
 
+spec('table.pack', () -> {
+  if _VERSION == 'Lua 5.1' {
+    assert.are.same({ n = 0 }, stdlib.table.pack())
+    assert.are.same({ n = 1, 10 }, stdlib.table.pack(10))
+    assert.are.same({ n = 3, 10, 30, 20 }, stdlib.table.pack(10, 30, 20))
+  } else {
+    assert.is_nil(rawget(stdlib.table, 'pack'))
+  }
+})
+
 spec('table.slice', () -> {
   assert.are.same({}, stdlib.table.slice({}))
   assert.are.same({ 1, 2 }, stdlib.table.slice({ 1, 2 }))
@@ -625,6 +643,14 @@ spec('table.slice', () -> {
   assert.are.same({ 'b', 'c' }, stdlib.table.slice({ 'a', 'b', 'c' }, -2, 3))
 
   assert.are.same({}, stdlib.table.slice({ 'a', 'b', 'c' }, 4))
+})
+
+spec('table.unpack', () -> {
+  if _VERSION == 'Lua 5.1' {
+    assert.are.equal(unpack, stdlib.table.unpack)
+  } else {
+    assert.is_nil(rawget(stdlib.table, 'unpack'))
+  }
 })
 
 spec('table.values', () -> {

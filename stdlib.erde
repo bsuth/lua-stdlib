@@ -195,6 +195,12 @@ function string.trim(s, pattern = '%s+') {
 local _native_table = table
 module table = setmetatable({}, { __index = _native_table })
 
+-- Polyfill `table.pack` and `table.unpack`
+if _VERSION == 'Lua 5.1' {
+  table.pack = (...) -> ({ n =  select('#', ...), ... })
+  table.unpack = unpack
+}
+
 function table.assign(t, ...) {
   for _, _t in pairs({ ... }) {
     for key, value in pairs(_t) {

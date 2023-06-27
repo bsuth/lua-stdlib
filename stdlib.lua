@@ -169,6 +169,15 @@ local table = setmetatable({}, {
 	__index = _native_table,
 })
 _MODULE.table = table
+if _VERSION == "Lua 5.1" then
+	table.pack = function(...)
+		return {
+			n = select("#", ...),
+			...,
+		}
+	end
+	table.unpack = unpack
+end
 function table.assign(t, ...)
 	for _, _t in pairs({
 		...,
