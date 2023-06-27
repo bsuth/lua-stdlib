@@ -147,6 +147,29 @@ function string.escape(s) {
   return table.concat(result, '%%')
 }
 
+function string.lpad(s, length, padding = ' ') {
+  return padding:rep(math.ceil((length - #s) / #padding)) .. s
+}
+
+function string.ltrim(s, pattern = '%s+') {
+  -- Wrap in parentheses to only get first return
+  return (s:gsub("^{pattern}", ''))
+}
+
+function string.pad(s, length, padding = ' ') {
+  local num_pads = math.ceil(((length - #s) / #padding) / 2)
+  return padding:rep(num_pads) .. s .. padding:rep(num_pads)
+}
+
+function string.rpad(s, length, padding = ' ') {
+  return s .. padding:rep(math.ceil((length - #s) / #padding))
+}
+
+function string.rtrim(s, pattern = '%s+') {
+  -- Wrap in parentheses to only get first return
+  return (s:gsub("{pattern}$", ''))
+}
+
 function string.split(s, separator = '%s+') {
   local result = {}
   local i, j = s:find(separator)
@@ -162,8 +185,7 @@ function string.split(s, separator = '%s+') {
 }
 
 function string.trim(s, pattern = '%s+') {
-  -- Wrap in parentheses to only get first return
-  return (s:gsub("^{pattern}", ''):gsub("{pattern}$", ''))
+  return string.ltrim(string.rtrim(s, pattern), pattern)
 }
 
 -- -----------------------------------------------------------------------------

@@ -120,6 +120,11 @@ print(string.trim) -- nil
 - [`package`](#package)
 - [`string`](#string)
     - [`string.escape(s)`](#string.escapes)
+    - [`string.lpad(s, length, padding = ' ')`](#string.lpads-length-padding)
+    - [`string.ltrim(s, pattern = '%s+')`](#string.ltrims-pattern)
+    - [`string.pad(s, length, padding = ' ')`](#string.pads-length-padding)
+    - [`string.rpad(s, length, padding = ' ')`](#string.rpads-length-padding)
+    - [`string.rtrim(s, pattern = '%s+')`](#string.rtrims-pattern)
     - [`string.split(s, separator = '%s+')`](#string.splits-separator)
     - [`string.trim(s, pattern = '%s+')`](#string.trims-pattern)
 - [`table`](#table)
@@ -289,6 +294,11 @@ local string = require('stdlib').string
 ```
 
 - [`string.escape(s)`](#string.escapes)
+- [`string.lpad(s, length, padding = ' ')`](#string.lpads-length-padding)
+- [`string.ltrim(s, pattern = '%s+')`](#string.ltrims-pattern)
+- [`string.pad(s, length, padding = ' ')`](#string.pads-length-padding)
+- [`string.rpad(s, length, padding = ' ')`](#string.rpads-length-padding)
+- [`string.rtrim(s, pattern = '%s+')`](#string.rtrims-pattern)
 - [`string.split(s, separator = '%s+')`](#string.splits-separator)
 - [`string.trim(s, pattern = '%s+')`](#string.trims-pattern)
 
@@ -302,6 +312,70 @@ local string = require('stdlib').string
 
 print(string.escape('volume: 43%')) -- "volume: 43%%"
 print(string.escape('a+')) -- "a%+"
+```
+
+#### `string.lpad(s, length, padding = ' ')`
+
+Returns the string `s`, prepended with `padding` until the string length is
+greater than `length`. If `padding` is not specified, defaults to prepending
+spaces.
+
+```lua
+local string = require('stdlib').string
+
+print(string.lpad('aaa', 6)) -- "   aaa"
+print(string.lpad('aaa', 6, 'bb')) -- "bbbbaaa"
+```
+
+#### `string.ltrim(s, pattern = '%s+')`
+
+Returns the string `s` without any leading matches for `pattern`. If no pattern
+is specified, defaults to removing any leading whitespace.
+
+```lua
+local string = require('stdlib').string
+
+print(string.ltrim('  hello world    ')) -- "hello world    "
+print(string.ltrim('aabbbcccaaaaa', 'a+')) -- "bbbcccaaaaa"
+```
+
+#### `string.pad(s, length, padding = ' ')`
+
+Takes a string, `s`, and both prepends and appends `padding` until the string
+length is greater than `length`, returning the resulting string. This always
+preprends and appends at the same time, so that `s` is "centered" around the
+padding. If `padding` is not specified, defaults to prepending / appending spaces.
+
+```lua
+local string = require('stdlib').string
+
+print(string.pad('aaa', 6)) -- "  aaa  "
+print(string.pad('aaa', 6, 'bb')) -- "bbaaabb"
+```
+
+#### `string.rpad(s, length, padding = ' ')`
+
+Returns the string `s`, appended with `padding` until the string length is
+greater than `length`. If `padding` is not specified, defaults to appending
+spaces.
+
+```lua
+local string = require('stdlib').string
+
+print(string.rpad('aaa', 6)) -- "aaa   "
+print(string.rpad('aaa', 6, 'bb')) -- "aaabbbb"
+```
+
+#### `string.rtrim(s, pattern = '%s+')`
+
+Returns the string `s` without any trailing matches for `pattern`. If no pattern
+is specified, defaults to removing any trailing whitespace.
+
+```lua
+local string = require('stdlib').string
+
+print(string.rtrim('  hello world    ')) -- "  hello world"
+print(string.rtrim('aabbbcccaaaaa', 'a+')) -- "aabbbccc"
 ```
 
 #### `string.split(s, separator = '%s+')`

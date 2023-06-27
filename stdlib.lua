@@ -113,6 +113,37 @@ function string.escape(s)
 	end
 	return table.concat(result, "%%")
 end
+function string.lpad(s, length, padding)
+	if padding == nil then
+		padding = " "
+	end
+	return padding:rep(math.ceil((length - #s) / #padding)) .. s
+end
+function string.ltrim(s, pattern)
+	if pattern == nil then
+		pattern = "%s+"
+	end
+	return s:gsub(("^" .. tostring(pattern)), "")
+end
+function string.pad(s, length, padding)
+	if padding == nil then
+		padding = " "
+	end
+	local num_pads = math.ceil(((length - #s) / #padding) / 2)
+	return padding:rep(num_pads) .. s .. padding:rep(num_pads)
+end
+function string.rpad(s, length, padding)
+	if padding == nil then
+		padding = " "
+	end
+	return s .. padding:rep(math.ceil((length - #s) / #padding))
+end
+function string.rtrim(s, pattern)
+	if pattern == nil then
+		pattern = "%s+"
+	end
+	return s:gsub((tostring(pattern) .. "$"), "")
+end
 function string.split(s, separator)
 	if separator == nil then
 		separator = "%s+"
@@ -131,7 +162,7 @@ function string.trim(s, pattern)
 	if pattern == nil then
 		pattern = "%s+"
 	end
-	return s:gsub(("^" .. tostring(pattern)), ""):gsub((tostring(pattern) .. "$"), "")
+	return string.ltrim(string.rtrim(s, pattern), pattern)
 end
 local _native_table = table
 local table = setmetatable({}, {
