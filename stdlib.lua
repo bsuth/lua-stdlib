@@ -178,6 +178,17 @@ if _VERSION == "Lua 5.1" then
 	end
 	table.unpack = unpack
 end
+function table.collect(t, iterator)
+	local result = {}
+	for key, value in iterator(t) do
+		if value == nil then
+			table.insert(result, key)
+		else
+			result[key] = value
+		end
+	end
+	return result
+end
 function table.deepcopy(t)
 	local result = {}
 	for key, value in pairs(t) do

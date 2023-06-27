@@ -370,6 +370,77 @@ spec("table", function()
 		assert.are.equal(table[key], stdlib.table[key])
 	end
 end)
+spec("table.collect", function()
+	assert.are.same(
+		{
+			a = 1,
+			b = 2,
+			10,
+			20,
+			30,
+		},
+		stdlib.table.collect({
+			a = 1,
+			b = 2,
+			10,
+			20,
+			30,
+		}, pairs)
+	)
+	assert.are.same(
+		{
+			10,
+			20,
+			30,
+		},
+		stdlib.table.collect({
+			a = 1,
+			b = 2,
+			10,
+			20,
+			30,
+		}, ipairs)
+	)
+	assert.are.same(
+		{
+			a = 1,
+			b = 2,
+		},
+		stdlib.table.collect({
+			a = 1,
+			b = 2,
+			10,
+			20,
+			30,
+		}, stdlib.kpairs)
+	)
+	local function value_iter(t)
+		local next_key = nil
+		local function value_iter_next()
+			local new_next_key, value = next(t, next_key)
+			next_key = new_next_key
+			return value
+		end
+		return value_iter_next, t, nil
+	end
+	local value_iter_expected = {
+		10,
+		20,
+		30,
+		"hello",
+		"world",
+	}
+	local value_iter_got = stdlib.table.collect({
+		a = "hello",
+		b = "world",
+		10,
+		20,
+		30,
+	}, value_iter)
+	table.sort(value_iter_expected, any_sort)
+	table.sort(value_iter_got, any_sort)
+	assert.are.same(value_iter_expected, value_iter_got)
+end)
 spec("table.deepcopy", function()
 	local function assert_deepcopy(t, copy)
 		if copy == nil then
