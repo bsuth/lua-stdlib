@@ -254,7 +254,8 @@ function table.merge(t, ...)
 		end
 	end
 end
-function table.reduce(t, result, callback)
+function table.reduce(t, initial, callback)
+	local result = initial
 	for key, value in pairs(t) do
 		result = callback(result, value, key)
 	end

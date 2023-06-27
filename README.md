@@ -136,7 +136,7 @@ print(string.trim) -- nil
     - [`table.map(t, callback)`](#tablemapt-callback)
     - [`table.merge(t, ...)`](#tablemerget-)
     - [`table.pack(...)`](#tablepack)
-    - [`table.reduce(t, result, callback)`](#tablereducet-result-callback)
+    - [`table.reduce(t, initial, callback)`](#tablereducet-initial-callback)
     - [`table.reverse(t)`](#tablereverset)
     - [`table.shallowcopy(t)`](#tableshallowcopyt)
     - [`table.slice(t, i = 1, j = #t)`](#tableslicet-i--1-j--t)
@@ -421,7 +421,7 @@ local table = require('stdlib').table
 - [`table.map(t, callback)`](#tablemapt-callback)
 - [`table.merge(t, ...)`](#tablemerget-)
 - [`table.pack(...)`](#tablepack)
-- [`table.reduce(t, result, callback)`](#tablereducet-result-callback)
+- [`table.reduce(t, initial, callback)`](#tablereducet-initial-callback)
 - [`table.reverse(t)`](#tablereverset)
 - [`table.shallowcopy(t)`](#tableshallowcopyt)
 - [`table.slice(t, i = 1, j = #t)`](#tableslicet-i--1-j--t)
@@ -563,18 +563,19 @@ print(t) -- { a = 'bye', b = 'bye', 10, 20, 30 }
 Polyfill for the Lua 5.2+ [`table.pack`](https://www.lua.org/manual/5.2/manual.html#pdf-table.pack)
 function. This field only exists if `_VERSION` is `Lua 5.1`.
 
-#### `table.reduce(t, result, callback)`
+#### `table.reduce(t, initial, callback)`
 
-Accepts an initial value `result`, and a callback that takes `(result, value, key)`
-and returns a new value for `result`. The callback is called for every
-`(value, key)` in `t` and the final `result` is returned.
+Accepts an initial value `initial`, and a callback that takes `(result, value, key)`.
+The callback is called for every `(value, key)` in `t`, with the first call
+having `result == initial` and subsequent calls using the return value of the
+previous call. The final `result` is returned.
 
 ```lua
 local table = require('stdlib').table
 
 local t = { 10, 20, 30, 40 }
 
-local reduced = table.map(t, 0, function(result, value, key)
+local reduced = table.reduce(t, 0, function(result, value, key)
   return result + value
 end)
 

@@ -291,7 +291,9 @@ function table.merge(t, ...) {
   }
 }
 
-function table.reduce(t, result, callback) {
+function table.reduce(t, initial, callback) {
+  local result = initial
+
   for key, value in pairs(t) {
     result = callback(result, value, key)
   }
