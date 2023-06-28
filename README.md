@@ -134,7 +134,7 @@ print(string.trim) -- nil
     - [`string.split(s, separator = '%s+')`](#stringsplits-separator--s)
     - [`string.trim(s, pattern = '%s+')`](#stringtrims-pattern--s)
 - [`table`](#table)
-    - [`table.collect(t, iterator)`](#tablecollectt-iterator)
+    - [`table.collect(...)`](#tablecollect)
     - [`table.deepcopy(t)`](#tabledeepcopyt)
     - [`table.empty(t)`](#tableemptyt)
     - [`table.filter(t, callback)`](#tablefiltert-callback)
@@ -508,7 +508,7 @@ Extension of [Lua's native `table` library](https://www.lua.org/manual/5.1/manua
 local table = require('stdlib').table
 ```
 
-- [`table.collect(t, iterator)`](#tablecollectt-iterator)
+- [`table.collect(...)`](#tablecollect)
 - [`table.deepcopy(t)`](#tabledeepcopyt)
 - [`table.empty(t)`](#tableemptyt)
 - [`table.filter(t, callback)`](#tablefiltert-callback)
@@ -524,12 +524,13 @@ local table = require('stdlib').table
 - [`table.unpack(t, i = 1, j = #t)`](#tableunpackt-i--1-j--t)
 - [`table.values(t)`](#tablevaluest)
 
-#### `table.collect(t, iterator)`
+#### `table.collect(...)`
 
-Iterates a table, `t`, using the provided iterator and places the iteration
-results into a table. If the iteration returns two values, the first will be
-used as a key and the second as the value. Otherwise the iteration return will
-simply be inserted into the array portion of the resulting table.
+Iterates using the provided [generic for](https://www.lua.org/pil/7.2.html)
+vararg expressions and places the iteration results into a table. If the
+iteration returns two values, the first will be used as a key and the second as
+the value. Otherwise the iteration return will simply be inserted into the array
+portion of the resulting table.
 
 ```lua
 local kpairs = require('stdlib').kpairs
@@ -537,8 +538,8 @@ local table = require('stdlib').table
 
 local t = { a = 1, b = 2, 10, 20, 30 }
 
-print(table.collect(t, ipairs)) -- { 10, 20, 30 }
-print(table.collect(t, kpairs)) -- { a = 1, b = 2 }
+print(table.collect(ipairs(t))) -- { 10, 20, 30 }
+print(table.collect(kpairs(t))) -- { a = 1, b = 2 }
 ```
 
 #### `table.deepcopy(t)`

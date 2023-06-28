@@ -552,13 +552,13 @@ spec("table.collect", function()
 			20,
 			30,
 		},
-		stdlib.table.collect({
+		stdlib.table.collect(pairs({
 			a = 1,
 			b = 2,
 			10,
 			20,
 			30,
-		}, pairs)
+		}))
 	)
 	assert.are.same(
 		{
@@ -566,26 +566,26 @@ spec("table.collect", function()
 			20,
 			30,
 		},
-		stdlib.table.collect({
+		stdlib.table.collect(ipairs({
 			a = 1,
 			b = 2,
 			10,
 			20,
 			30,
-		}, ipairs)
+		}))
 	)
 	assert.are.same(
 		{
 			a = 1,
 			b = 2,
 		},
-		stdlib.table.collect({
+		stdlib.table.collect(stdlib.kpairs({
 			a = 1,
 			b = 2,
 			10,
 			20,
 			30,
-		}, stdlib.kpairs)
+		}))
 	)
 	local function value_iter(t)
 		local next_key = nil
@@ -603,13 +603,13 @@ spec("table.collect", function()
 		"hello",
 		"world",
 	}
-	local value_iter_got = stdlib.table.collect({
+	local value_iter_got = stdlib.table.collect(value_iter({
 		a = "hello",
 		b = "world",
 		10,
 		20,
 		30,
-	}, value_iter)
+	}))
 	table.sort(value_iter_expected, any_sort)
 	table.sort(value_iter_got, any_sort)
 	assert.are.same(value_iter_expected, value_iter_got)

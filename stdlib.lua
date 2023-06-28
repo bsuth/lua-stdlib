@@ -192,9 +192,9 @@ if _VERSION == "Lua 5.1" then
 	end
 	table.unpack = unpack
 end
-function table.collect(t, iterator)
+function table.collect(...)
 	local result = {}
-	for key, value in iterator(t) do
+	for key, value in ... do
 		if value == nil then
 			table.insert(result, key)
 		else

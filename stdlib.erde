@@ -251,10 +251,10 @@ if _VERSION == 'Lua 5.1' {
   table.unpack = unpack
 }
 
-function table.collect(t, iterator) {
+function table.collect(...) {
   local result = {}
 
-  for key, value in iterator(t) {
+  for key, value in ... {
     if value == nil {
       table.insert(result, key)
     } else {
