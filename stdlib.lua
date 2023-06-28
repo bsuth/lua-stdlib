@@ -121,6 +121,16 @@ function package.split(path)
 	local template_separator = string.split(package.config, "\n")[2]
 	return string.split(path, template_separator)
 end
+local function _string_chars_iter(a, i)
+	i = i + 1
+	local char = a:sub(i, i)
+	if char ~= "" then
+		return i, char
+	end
+end
+function string.chars(s)
+	return _string_chars_iter, s, 0
+end
 function string.escape(s)
 	local result = {}
 	for _, part in ipairs(string.split(s, "%%%%")) do

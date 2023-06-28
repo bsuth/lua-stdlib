@@ -186,6 +186,18 @@ function package.split(path) {
 -- String
 -- -----------------------------------------------------------------------------
 
+local function _string_chars_iter(a, i) {
+  i += 1
+  local char = a:sub(i, i)
+  if char != '' {
+    return i, char
+  }
+}
+
+function string.chars(s) {
+  return _string_chars_iter, s, 0
+}
+
 function string.escape(s) {
   local result = {}
 

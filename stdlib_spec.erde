@@ -321,6 +321,21 @@ spec('string', () -> {
   }
 })
 
+spec('string.chars', () -> {
+  local function assert_chars(s) {
+    local chars = {}
+
+    for i, char in stdlib.string.chars(s) {
+      table.insert(chars, char)
+    }
+
+    assert.are.equal(s, table.concat(chars))
+  }
+
+  assert_chars('')
+  assert_chars('hello world')
+})
+
 spec('string.escape', () -> {
   assert.are.equal('a', stdlib.string.escape('a'))
   assert.are.equal('1', stdlib.string.escape('1'))

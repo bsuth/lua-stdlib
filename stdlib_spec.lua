@@ -321,6 +321,17 @@ spec("string", function()
 		assert.are.equal(string[key], stdlib.string[key])
 	end
 end)
+spec("string.chars", function()
+	local function assert_chars(s)
+		local chars = {}
+		for i, char in stdlib.string.chars(s) do
+			table.insert(chars, char)
+		end
+		assert.are.equal(s, table.concat(chars))
+	end
+	assert_chars("")
+	assert_chars("hello world")
+end)
 spec("string.escape", function()
 	assert.are.equal("a", stdlib.string.escape("a"))
 	assert.are.equal("1", stdlib.string.escape("1"))

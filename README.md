@@ -125,6 +125,7 @@ print(string.trim) -- nil
     - [`package.remove(position)`](#packageremoveposition)
     - [`package.split(path)`](#packagesplitpath)
 - [`string`](#string)
+    - [`string.chars(s)`](#stringcharss)
     - [`string.escape(s)`](#stringescapes)
     - [`string.lpad(s, length, padding = ' ')`](#stringlpads-length-padding---)
     - [`string.ltrim(s, pattern = '%s+')`](#stringltrims-pattern--s)
@@ -391,6 +392,7 @@ Extension of [Lua's native `string` library](https://www.lua.org/manual/5.1/manu
 local string = require('stdlib').string
 ```
 
+- [`string.chars(s)`](#stringcharss)
 - [`string.escape(s)`](#stringescapes)
 - [`string.lpad(s, length, padding = ' ')`](#stringlpads-length-padding---)
 - [`string.ltrim(s, pattern = '%s+')`](#stringltrims-pattern--s)
@@ -399,6 +401,24 @@ local string = require('stdlib').string
 - [`string.rtrim(s, pattern = '%s+')`](#stringrtrims-pattern--s)
 - [`string.split(s, separator = '%s+')`](#stringsplits-separator--s)
 - [`string.trim(s, pattern = '%s+')`](#stringtrims-pattern--s)
+
+#### `string.chars(s)`
+
+Iterator over all characters in the string `s`. Iterations return `(i, char)`,
+with `i` being the index of the given character.
+
+```lua
+local string = require('stdlib').string
+
+for i, char in string.chars('hello') do
+    -- 1, h
+    -- 2, e
+    -- 3, l
+    -- 4, l
+    -- 5, o
+    print(i, char)
+end
+```
 
 #### `string.escape(s)`
 
