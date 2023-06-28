@@ -43,8 +43,8 @@ Only libraries from Lua 5.1+ are provided:
 - `string`
 - `table`
 
-Each exported library will default index the native library, which is especially
-useful for overriding local references:
+Each exported library uses its native library for both `__index` and `__newindex`,
+which is especially useful for overriding local references:
 
 ```lua
 local string = require('stdlib').string

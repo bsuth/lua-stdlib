@@ -5,28 +5,28 @@
 -- -----------------------------------------------------------------------------
 
 local _native_coroutine = coroutine
-module coroutine = setmetatable({}, { __index = _native_coroutine })
+module coroutine = {}
 
 local _native_debug = debug
-module debug = setmetatable({}, { __index = _native_debug })
+module debug = {}
 
 local _native_io = io
-module io = setmetatable({}, { __index = _native_io })
+module io = {}
 
 local _native_math = math
-module math = setmetatable({}, { __index = _native_math })
+module math = {}
 
 local _native_os = os
-module os = setmetatable({}, { __index = _native_os })
+module os = {}
 
 local _native_package = package
-module package = setmetatable({}, { __index = _native_package })
+module package = {}
 
 local _native_string = string
-module string = setmetatable({}, { __index = _native_string })
+module string = {}
 
 local _native_table = table
-module table = setmetatable({}, { __index = _native_table })
+module table = {}
 
 -- -----------------------------------------------------------------------------
 -- Load / Unload
@@ -149,7 +149,7 @@ function math.sign(x) {
 function package.cinsert(...) {
   local templates = package.split(package.cpath)
   table.insert(templates, ...)
-  _native_package.cpath = package.concat(templates)
+  package.cpath = package.concat(templates)
 }
 
 function package.concat(templates, i, j) {
@@ -160,20 +160,20 @@ function package.concat(templates, i, j) {
 function package.cremove(position) {
   local templates = package.split(package.cpath)
   local removed = table.remove(templates, position)
-  _native_package.cpath = package.concat(templates)
+  package.cpath = package.concat(templates)
   return removed
 }
 
 function package.insert(...) {
   local templates = package.split(package.path)
   table.insert(templates, ...)
-  _native_package.path = package.concat(templates)
+  package.path = package.concat(templates)
 }
 
 function package.remove(position) {
   local templates = package.split(package.path)
   local removed = table.remove(templates, position)
-  _native_package.path = package.concat(templates)
+  package.path = package.concat(templates)
   return removed
 }
 
@@ -405,3 +405,19 @@ function table.values(t) {
 
   return result
 }
+
+-- -----------------------------------------------------------------------------
+-- Library Metatables
+--
+-- Set library metatables. We must do this at the end, since our libraries will
+-- effectively be frozen once the `__newindex` metamethod is set.
+-- -----------------------------------------------------------------------------
+
+setmetatable(coroutine, { __index = _native_coroutine, __newindex = _native_coroutine })
+setmetatable(debug, { __index = _native_debug, __newindex = _native_debug })
+setmetatable(io, { __index = _native_io, __newindex = _native_io })
+setmetatable(math, { __index = _native_math, __newindex = _native_math })
+setmetatable(os, { __index = _native_os, __newindex = _native_os })
+setmetatable(package, { __index = _native_package, __newindex = _native_package })
+setmetatable(string, { __index = _native_string, __newindex = _native_string })
+setmetatable(table, { __index = _native_table, __newindex = _native_table })

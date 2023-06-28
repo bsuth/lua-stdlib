@@ -1,43 +1,27 @@
 local _MODULE = {}
 local _native_coroutine = coroutine
-local coroutine = setmetatable({}, {
-	__index = _native_coroutine,
-})
+local coroutine = {}
 _MODULE.coroutine = coroutine
 local _native_debug = debug
-local debug = setmetatable({}, {
-	__index = _native_debug,
-})
+local debug = {}
 _MODULE.debug = debug
 local _native_io = io
-local io = setmetatable({}, {
-	__index = _native_io,
-})
+local io = {}
 _MODULE.io = io
 local _native_math = math
-local math = setmetatable({}, {
-	__index = _native_math,
-})
+local math = {}
 _MODULE.math = math
 local _native_os = os
-local os = setmetatable({}, {
-	__index = _native_os,
-})
+local os = {}
 _MODULE.os = os
 local _native_package = package
-local package = setmetatable({}, {
-	__index = _native_package,
-})
+local package = {}
 _MODULE.package = package
 local _native_string = string
-local string = setmetatable({}, {
-	__index = _native_string,
-})
+local string = {}
 _MODULE.string = string
 local _native_table = table
-local table = setmetatable({}, {
-	__index = _native_table,
-})
+local table = {}
 _MODULE.table = table
 local function load()
 	for key, value in pairs(_MODULE) do
@@ -110,7 +94,7 @@ end
 function package.cinsert(...)
 	local templates = package.split(package.cpath)
 	table.insert(templates, ...)
-	_native_package.cpath = package.concat(templates)
+	package.cpath = package.concat(templates)
 end
 function package.concat(templates, i, j)
 	local template_separator = string.split(package.config, "\n")[2]
@@ -119,18 +103,18 @@ end
 function package.cremove(position)
 	local templates = package.split(package.cpath)
 	local removed = table.remove(templates, position)
-	_native_package.cpath = package.concat(templates)
+	package.cpath = package.concat(templates)
 	return removed
 end
 function package.insert(...)
 	local templates = package.split(package.path)
 	table.insert(templates, ...)
-	_native_package.path = package.concat(templates)
+	package.path = package.concat(templates)
 end
 function package.remove(position)
 	local templates = package.split(package.path)
 	local removed = table.remove(templates, position)
-	_native_package.path = package.concat(templates)
+	package.path = package.concat(templates)
 	return removed
 end
 function package.split(path)
@@ -341,6 +325,38 @@ function table.values(t)
 	end
 	return result
 end
+setmetatable(coroutine, {
+	__index = _native_coroutine,
+	__newindex = _native_coroutine,
+})
+setmetatable(debug, {
+	__index = _native_debug,
+	__newindex = _native_debug,
+})
+setmetatable(io, {
+	__index = _native_io,
+	__newindex = _native_io,
+})
+setmetatable(math, {
+	__index = _native_math,
+	__newindex = _native_math,
+})
+setmetatable(os, {
+	__index = _native_os,
+	__newindex = _native_os,
+})
+setmetatable(package, {
+	__index = _native_package,
+	__newindex = _native_package,
+})
+setmetatable(string, {
+	__index = _native_string,
+	__newindex = _native_string,
+})
+setmetatable(table, {
+	__index = _native_table,
+	__newindex = _native_table,
+})
 return _MODULE
 -- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__
