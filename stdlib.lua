@@ -245,6 +245,10 @@ function table.find(t, callback)
 		end
 	end
 end
+function table.has(t, callback)
+	local _, key = table.find(t, callback)
+	return key ~= nil
+end
 function table.keys(t)
 	local result = {}
 	for key, value in pairs(t) do

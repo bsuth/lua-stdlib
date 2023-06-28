@@ -139,6 +139,7 @@ print(string.trim) -- nil
     - [`table.empty(t)`](#tableemptyt)
     - [`table.filter(t, callback)`](#tablefiltert-callback)
     - [`table.find(t, callback)`](#tablefindt-callback)
+    - [`table.has(t, callback)`](#tablehast-callback)
     - [`table.keys(t)`](#tablekeyst)
     - [`table.map(t, callback)`](#tablemapt-callback)
     - [`table.merge(t, ...)`](#tablemerget-)
@@ -513,6 +514,7 @@ local table = require('stdlib').table
 - [`table.empty(t)`](#tableemptyt)
 - [`table.filter(t, callback)`](#tablefiltert-callback)
 - [`table.find(t, callback)`](#tablefindt-callback)
+- [`table.has(t, callback)`](#tablehast-callback)
 - [`table.keys(t)`](#tablekeyst)
 - [`table.map(t, callback)`](#tablemapt-callback)
 - [`table.merge(t, ...)`](#tablemerget-)
@@ -620,6 +622,28 @@ local table = require('stdlib').table
 local t = { 10, 20, a = 'hello', b = 'world' }
 
 print(table.find(t, 'world')) -- world b
+```
+
+#### `table.has(t, callback)`
+
+Same behavior as [`table.find`](#tablefindt-callback), but returns true if a
+value is found and otherwise false
+
+```lua
+local table = require('stdlib').table
+
+local t = { 10, 20, a = 'hello', b = 'world' }
+
+print(table.has(t, 'world')) -- true
+print(table.has(t, 'blah')) -- false
+
+print(table.has(t, function(value, key)
+  return type(value) == 'number' and value > 10
+end)) -- true
+
+print(table.has(t, function(value, key)
+  return type(value) == 'number' and value > 1000
+end)) -- false
 ```
 
 #### `table.keys(t)`

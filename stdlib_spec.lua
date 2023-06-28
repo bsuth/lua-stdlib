@@ -889,6 +889,136 @@ spec("table.find", function()
 		return value < 20
 	end)
 end)
+spec("table.has", function()
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			"a",
+			"b",
+			"c",
+		}, "a")
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			"a",
+			"b",
+			"c",
+		}, "a")
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			"a",
+			"b",
+			"c",
+		}, "b")
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			"a",
+			"b",
+			"c",
+		}, "c")
+	)
+	assert.are.equal(
+		false,
+		stdlib.table.has({
+			"a",
+			"b",
+			"c",
+		}, "d")
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			a = "x",
+			b = "y",
+			c = "z",
+		}, "x")
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			a = "x",
+			b = "y",
+			c = "z",
+		}, "y")
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			a = "x",
+			b = "y",
+			c = "z",
+		}, "z")
+	)
+	assert.are.equal(
+		false,
+		stdlib.table.has({
+			a = "x",
+			b = "y",
+			c = "z",
+		}, "w")
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			30,
+			20,
+			10,
+		}, function(value)
+			return value < 40
+		end)
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			30,
+			20,
+			10,
+		}, function(value)
+			return value < 30
+		end)
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			30,
+			20,
+			10,
+		}, function(value)
+			return value < 20
+		end)
+	)
+	assert.are.equal(
+		false,
+		stdlib.table.has({
+			30,
+			20,
+			10,
+		}, function(value)
+			return value < 10
+		end)
+	)
+	assert.are.equal(
+		true,
+		stdlib.table.has({
+			a = 10,
+		}, function(value)
+			return value < 20
+		end)
+	)
+	assert.are.equal(
+		false,
+		stdlib.table.has({
+			a = 20,
+		}, function(value)
+			return value < 20
+		end)
+	)
+end)
 spec("table.keys", function()
 	local function assert_keys(expected, t)
 		local keys = stdlib.table.keys(t)

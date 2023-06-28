@@ -662,6 +662,28 @@ spec('table.find', () -> {
   assert_find(nil, { a = 20 }, value -> value < 20)
 })
 
+spec('table.has', () -> {
+  assert.are.equal(true, stdlib.table.has({ 'a', 'b', 'c' }, 'a'))
+
+  assert.are.equal(true, stdlib.table.has({ 'a', 'b', 'c' }, 'a'))
+  assert.are.equal(true, stdlib.table.has({ 'a', 'b', 'c' }, 'b'))
+  assert.are.equal(true, stdlib.table.has({ 'a', 'b', 'c' }, 'c'))
+  assert.are.equal(false, stdlib.table.has({ 'a', 'b', 'c' }, 'd'))
+
+  assert.are.equal(true, stdlib.table.has({ a = 'x', b = 'y', c = 'z' }, 'x'))
+  assert.are.equal(true, stdlib.table.has({ a = 'x', b = 'y', c = 'z' }, 'y'))
+  assert.are.equal(true, stdlib.table.has({ a = 'x', b = 'y', c = 'z' }, 'z'))
+  assert.are.equal(false, stdlib.table.has({ a = 'x', b = 'y', c = 'z' }, 'w'))
+
+  assert.are.equal(true, stdlib.table.has({ 30, 20, 10 }, value -> value < 40))
+  assert.are.equal(true, stdlib.table.has({ 30, 20, 10 }, value -> value < 30))
+  assert.are.equal(true, stdlib.table.has({ 30, 20, 10 }, value -> value < 20))
+  assert.are.equal(false, stdlib.table.has({ 30, 20, 10 }, value -> value < 10))
+
+  assert.are.equal(true, stdlib.table.has({ a = 10 }, value -> value < 20))
+  assert.are.equal(false, stdlib.table.has({ a = 20 }, value -> value < 20))
+})
+
 spec('table.keys', () -> {
   local function assert_keys(expected, t) {
     local keys = stdlib.table.keys(t)

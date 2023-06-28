@@ -315,6 +315,11 @@ function table.find(t, callback) {
   }
 }
 
+function table.has(t, callback) {
+  local _, key = table.find(t, callback)
+  return key != nil
+}
+
 function table.keys(t) {
   local result = {}
 
