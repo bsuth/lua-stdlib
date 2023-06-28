@@ -263,6 +263,34 @@ if _VERSION == 'Lua 5.1' {
   table.unpack = unpack
 }
 
+function table.clear(t, callback) {
+  if type(callback) == 'function' {
+    for key, value in kpairs(t) {
+      if callback(value, key) {
+        t[key] = nil
+      }
+    }
+
+    for i = #t, 1, -1 {
+      if callback(t[i], i) {
+        table.remove(t, i)
+      }
+    }
+  } else {
+    for key, value in kpairs(t) {
+      if value == callback {
+        t[key] = nil
+      }
+    }
+
+    for i = #t, 1, -1 {
+      if t[i] == callback {
+        table.remove(t, i)
+      }
+    }
+  }
+}
+
 function table.collect(...) {
   local result = {}
 

@@ -135,6 +135,7 @@ print(string.trim) -- nil
     - [`string.split(s, separator = '%s+')`](#stringsplits-separator--s)
     - [`string.trim(s, pattern = '%s+')`](#stringtrims-pattern--s)
 - [`table`](#table)
+    - [`table.clear(t, callback)`](#tablecleart-callback)
     - [`table.collect(...)`](#tablecollect)
     - [`table.deepcopy(t)`](#tabledeepcopyt)
     - [`table.empty(t)`](#tableemptyt)
@@ -529,6 +530,7 @@ Extension of [Lua's native `table` library](https://www.lua.org/manual/5.1/manua
 local table = require('stdlib').table
 ```
 
+- [`table.clear(t, callback)`](#tablecleart-callback)
 - [`table.collect(...)`](#tablecollect)
 - [`table.deepcopy(t)`](#tabledeepcopyt)
 - [`table.empty(t)`](#tableemptyt)
@@ -545,6 +547,37 @@ local table = require('stdlib').table
 - [`table.slice(t, i = 1, j = #t)`](#tableslicet-i--1-j--t)
 - [`table.unpack(t, i = 1, j = #t)`](#tableunpackt-i--1-j--t)
 - [`table.values(t)`](#tablevaluest)
+
+#### `table.clear(t, callback)`
+
+If `callback` is a function, expects a function that takes `(value, key)` from
+`t` and returns a boolean. This method will remove all entries from `t` for which
+`callback` returns true.
+
+```lua
+local table = require('stdlib').table
+
+local t = { 10, 20, a = 10, b = 20 }
+
+table.clear(t, function(value, key)
+  return value == 10
+end)
+
+print(t) -- { 20, b = 20 }
+```
+
+If `callback` is _not_ a function, this method will remove all entries from `t`
+where `value == callback`.
+
+```lua
+local table = require('stdlib').table
+
+local t = { 10, 20, a = 10, b = 20 }
+
+table.clear(t, 10)
+
+print(t) -- { 20, b = 20 }
+```
 
 #### `table.collect(...)`
 

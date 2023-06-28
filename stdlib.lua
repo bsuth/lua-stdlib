@@ -202,6 +202,31 @@ if _VERSION == "Lua 5.1" then
 	end
 	table.unpack = unpack
 end
+function table.clear(t, callback)
+	if type(callback) == "function" then
+		for key, value in kpairs(t) do
+			if callback(value, key) then
+				t[key] = nil
+			end
+		end
+		for i = #t, 1, -1 do
+			if callback(t[i], i) then
+				table.remove(t, i)
+			end
+		end
+	else
+		for key, value in kpairs(t) do
+			if value == callback then
+				t[key] = nil
+			end
+		end
+		for i = #t, 1, -1 do
+			if t[i] == callback then
+				table.remove(t, i)
+			end
+		end
+	end
+end
 function table.collect(...)
 	local result = {}
 	for key, value in ... do

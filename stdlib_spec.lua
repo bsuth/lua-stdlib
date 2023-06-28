@@ -554,6 +554,198 @@ spec("table", function()
 		assert.are.equal(table[key], stdlib.table[key])
 	end
 end)
+spec("table.clear", function()
+	local function assert_clear(expected, t, callback)
+		stdlib.table.clear(t, callback)
+		assert.are.same(expected, t)
+	end
+	assert_clear({
+		10,
+		20,
+		30,
+	}, {
+		10,
+		20,
+		30,
+	}, 0)
+	assert_clear({
+		20,
+		30,
+	}, {
+		10,
+		20,
+		30,
+	}, 10)
+	assert_clear({
+		10,
+		30,
+	}, {
+		10,
+		20,
+		30,
+	}, 20)
+	assert_clear({
+		10,
+		20,
+	}, {
+		10,
+		20,
+		30,
+	}, 30)
+	assert_clear({
+		a = 10,
+		b = 20,
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, 0)
+	assert_clear({
+		b = 20,
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, 10)
+	assert_clear({
+		a = 10,
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, 20)
+	assert_clear({
+		a = 10,
+		b = 20,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, 30)
+	assert_clear({
+		10,
+		30,
+	}, {
+		10,
+		20,
+		20,
+		30,
+	}, 20)
+	assert_clear({
+		c = 20,
+	}, {
+		a = 10,
+		b = 10,
+		c = 20,
+	}, 10)
+	assert_clear({
+		10,
+		20,
+		30,
+	}, {
+		10,
+		20,
+		30,
+	}, function(value)
+		return value < 10
+	end)
+	assert_clear({
+		20,
+		30,
+	}, {
+		10,
+		20,
+		30,
+	}, function(value)
+		return value < 20
+	end)
+	assert_clear({
+		30,
+	}, {
+		10,
+		20,
+		30,
+	}, function(value)
+		return value < 30
+	end)
+	assert_clear({}, {
+		10,
+		20,
+		30,
+	}, function(value)
+		return value < 40
+	end)
+	assert_clear({
+		a = 10,
+		b = 20,
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, function(value)
+		return value < 10
+	end)
+	assert_clear({
+		b = 20,
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, function(value)
+		return value < 20
+	end)
+	assert_clear({
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, function(value)
+		return value < 30
+	end)
+	assert_clear({}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, function(value)
+		return value < 40
+	end)
+	assert_clear({
+		b = 20,
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, function(value, key)
+		return key == "a"
+	end)
+	assert_clear({
+		a = 10,
+		c = 30,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, function(value, key)
+		return key == "b"
+	end)
+	assert_clear({
+		a = 10,
+		b = 20,
+	}, {
+		a = 10,
+		b = 20,
+		c = 30,
+	}, function(value, key)
+		return key == "c"
+	end)
+end)
 spec("table.collect", function()
 	assert.are.same(
 		{
