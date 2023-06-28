@@ -118,6 +118,12 @@ print(string.trim) -- nil
     - [`math.sign(x)`](#mathsignx)
 - [`os`](#os)
 - [`package`](#package)
+    - [`package.cinsert([position], template)`](#packagecinsertposition-template)
+    - [`package.concat(templates, i = 1, j = #templates)`](#packageconcattemplates-i--1-j--templates)
+    - [`package.cremove(position)`](#packagecremoveposition)
+    - [`package.insert([position], template)`](#packageinsertposition-template)
+    - [`package.remove(position)`](#packageremoveposition)
+    - [`package.split(path)`](#packagesplitpath)
 - [`string`](#string)
     - [`string.escape(s)`](#stringescapes)
     - [`string.lpad(s, length, padding = ' ')`](#stringlpads-length-padding---)
@@ -282,10 +288,98 @@ local os = require('stdlib').os
 ## `package`
 
 Extension of [Lua's native `package` library](https://www.lua.org/manual/5.1/manual.html#5.3).
-Currently has no additional methods.
 
 ```lua
 local package = require('stdlib').package
+```
+
+- [`package.cinsert([position], template)`](#packagecinsertposition-template)
+- [`package.concat(templates, i = 1, j = #templates)`](#packageconcattemplates-i--1-j--templates)
+- [`package.cremove(position)`](#packagecremoveposition)
+- [`package.insert([position], template)`](#packageinsertposition-template)
+- [`package.remove(position)`](#packageremoveposition)
+- [`package.split(path)`](#packagesplitpath)
+
+#### `package.cinsert([position], template)`
+
+Inserts a new template into `package.cpath`. Similar to the native
+[`table.insert`](https://www.lua.org/manual/5.1/manual.html#pdf-table.insert),
+this method optionally takes in a positional argument to indicate where the
+template should be inserted.
+
+```lua
+local package = require('stdlib').package
+
+print(package.cpath) -- ./?.so
+package.cinsert('../?.so')
+print(package.cpath) -- ./?.so;../?.so
+```
+
+#### `package.concat(templates, i = 1, j = #templates)`
+
+Similar to [`table.concat`](https://www.lua.org/manual/5.1/manual.html#pdf-table.concat)
+but uses the template separator from [`package.config`](https://www.lua.org/manual/5.2/manual.html#pdf-package.config).
+
+```lua
+local package = require('stdlib').package
+
+print(package.concat({ './?.lua', '../?.lua' })) -- ./?.lua;../?.lua
+```
+
+#### `package.cremove(position)`
+
+Removes a template from`package.cpath`. Similar to the native
+[`table.remove`](https://www.lua.org/manual/5.1/manual.html#pdf-table.remove),
+this method optionally takes in a positional argument to indicate which template
+should be removed. The removed template is returned
+
+```lua
+local package = require('stdlib').package
+
+print(package.cpath) -- ./?.so;../?.so
+print(package.cremove()) -- ../?.so
+print(package.cpath) -- ./?.so
+```
+
+#### `package.insert([position], template)`
+
+Inserts a new template into `package.path`. Similar to the native
+[`table.insert`](https://www.lua.org/manual/5.1/manual.html#pdf-table.insert),
+this method optionally takes in a positional argument to indicate where the
+template should be inserted.
+
+```lua
+local package = require('stdlib').package
+
+print(package.path) -- ./?.lua
+package.insert('../?.lua')
+print(package.path) -- ./?.lua;../?.lua
+```
+
+#### `package.remove(position)`
+
+Removes a template from`package.path`. Similar to the native
+[`table.remove`](https://www.lua.org/manual/5.1/manual.html#pdf-table.remove),
+this method optionally takes in a positional argument to indicate which template
+should be removed. The removed template is returned
+
+```lua
+local package = require('stdlib').package
+
+print(package.path) -- ./?.lua;../?.lua
+print(package.remove()) -- ../?.lua
+print(package.path) -- ./?.lua
+```
+
+#### `package.split(path)`
+
+Similar to [`string.split`](#stringsplits-separator--s) but uses the template
+separator from [`package.config`](https://www.lua.org/manual/5.2/manual.html#pdf-package.config).
+
+```lua
+local package = require('stdlib').package
+
+print(package.split('./?.lua;../?.lua')) -- { './?.lua', '../?.lua' }
 ```
 
 ## `string`

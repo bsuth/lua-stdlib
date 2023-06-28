@@ -1,4 +1,34 @@
 -- -----------------------------------------------------------------------------
+-- Libraries
+--
+-- Forward declared to be accessible anywhere.
+-- -----------------------------------------------------------------------------
+
+local _native_coroutine = coroutine
+module coroutine = setmetatable({}, { __index = _native_coroutine })
+
+local _native_debug = debug
+module debug = setmetatable({}, { __index = _native_debug })
+
+local _native_io = io
+module io = setmetatable({}, { __index = _native_io })
+
+local _native_math = math
+module math = setmetatable({}, { __index = _native_math })
+
+local _native_os = os
+module os = setmetatable({}, { __index = _native_os })
+
+local _native_package = package
+module package = setmetatable({}, { __index = _native_package })
+
+local _native_string = string
+module string = setmetatable({}, { __index = _native_string })
+
+local _native_table = table
+module table = setmetatable({}, { __index = _native_table })
+
+-- -----------------------------------------------------------------------------
 -- Load / Unload
 -- -----------------------------------------------------------------------------
 
@@ -66,29 +96,23 @@ module function kpairs(t) {
 -- Coroutine
 -- -----------------------------------------------------------------------------
 
-local _native_coroutine = coroutine
-module coroutine = setmetatable({}, { __index = _native_coroutine })
+-- EMPTY
 
 -- -----------------------------------------------------------------------------
 -- Debug
 -- -----------------------------------------------------------------------------
 
-local _native_debug = debug
-module debug = setmetatable({}, { __index = _native_debug })
+-- EMPTY
 
 -- -----------------------------------------------------------------------------
 -- IO
 -- -----------------------------------------------------------------------------
 
-local _native_io = io
-module io = setmetatable({}, { __index = _native_io })
+-- EMPTY
 
 -- -----------------------------------------------------------------------------
 -- Math
 -- -----------------------------------------------------------------------------
-
-local _native_math = math
-module math = setmetatable({}, { __index = _native_math })
 
 function math.clamp(x, min, max) {
   return math.min(math.max(x, min), max)
@@ -116,22 +140,51 @@ function math.sign(x) {
 -- OS
 -- -----------------------------------------------------------------------------
 
-local _native_os = os
-module os = setmetatable({}, { __index = _native_os })
+-- EMPTY
 
 -- -----------------------------------------------------------------------------
 -- Package
 -- -----------------------------------------------------------------------------
 
-local _native_package = package
-module package = setmetatable({}, { __index = _native_package })
+function package.cinsert(...) {
+  local templates = package.split(package.cpath)
+  table.insert(templates, ...)
+  _native_package.cpath = package.concat(templates)
+}
+
+function package.concat(templates, i, j) {
+  local template_separator = string.split(package.config, '\n')[2]
+  return table.concat(templates, template_separator, i, j)
+}
+
+function package.cremove(position) {
+  local templates = package.split(package.cpath)
+  local removed = table.remove(templates, position)
+  _native_package.cpath = package.concat(templates)
+  return removed
+}
+
+function package.insert(...) {
+  local templates = package.split(package.path)
+  table.insert(templates, ...)
+  _native_package.path = package.concat(templates)
+}
+
+function package.remove(position) {
+  local templates = package.split(package.path)
+  local removed = table.remove(templates, position)
+  _native_package.path = package.concat(templates)
+  return removed
+}
+
+function package.split(path) {
+  local template_separator = string.split(package.config, '\n')[2]
+  return string.split(path, template_separator)
+}
 
 -- -----------------------------------------------------------------------------
 -- String
 -- -----------------------------------------------------------------------------
-
-local _native_string = string
-module string = setmetatable({}, { __index = _native_string })
 
 function string.escape(s) {
   local result = {}
@@ -191,9 +244,6 @@ function string.trim(s, pattern = '%s+') {
 -- -----------------------------------------------------------------------------
 -- Table
 -- -----------------------------------------------------------------------------
-
-local _native_table = table
-module table = setmetatable({}, { __index = _native_table })
 
 -- Polyfill `table.pack` and `table.unpack`
 if _VERSION == 'Lua 5.1' {

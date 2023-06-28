@@ -1,4 +1,44 @@
 local _MODULE = {}
+local _native_coroutine = coroutine
+local coroutine = setmetatable({}, {
+	__index = _native_coroutine,
+})
+_MODULE.coroutine = coroutine
+local _native_debug = debug
+local debug = setmetatable({}, {
+	__index = _native_debug,
+})
+_MODULE.debug = debug
+local _native_io = io
+local io = setmetatable({}, {
+	__index = _native_io,
+})
+_MODULE.io = io
+local _native_math = math
+local math = setmetatable({}, {
+	__index = _native_math,
+})
+_MODULE.math = math
+local _native_os = os
+local os = setmetatable({}, {
+	__index = _native_os,
+})
+_MODULE.os = os
+local _native_package = package
+local package = setmetatable({}, {
+	__index = _native_package,
+})
+_MODULE.package = package
+local _native_string = string
+local string = setmetatable({}, {
+	__index = _native_string,
+})
+_MODULE.string = string
+local _native_table = table
+local table = setmetatable({}, {
+	__index = _native_table,
+})
+_MODULE.table = table
 local function load()
 	for key, value in pairs(_MODULE) do
 		local value_type = type(value)
@@ -48,26 +88,6 @@ local function kpairs(t)
 	return _kpairs_iter, t, nil
 end
 _MODULE.kpairs = kpairs
-local _native_coroutine = coroutine
-local coroutine = setmetatable({}, {
-	__index = _native_coroutine,
-})
-_MODULE.coroutine = coroutine
-local _native_debug = debug
-local debug = setmetatable({}, {
-	__index = _native_debug,
-})
-_MODULE.debug = debug
-local _native_io = io
-local io = setmetatable({}, {
-	__index = _native_io,
-})
-_MODULE.io = io
-local _native_math = math
-local math = setmetatable({}, {
-	__index = _native_math,
-})
-_MODULE.math = math
 function math.clamp(x, min, max)
 	return math.min(math.max(x, min), max)
 end
@@ -87,21 +107,36 @@ function math.sign(x)
 		return 0
 	end
 end
-local _native_os = os
-local os = setmetatable({}, {
-	__index = _native_os,
-})
-_MODULE.os = os
-local _native_package = package
-local package = setmetatable({}, {
-	__index = _native_package,
-})
-_MODULE.package = package
-local _native_string = string
-local string = setmetatable({}, {
-	__index = _native_string,
-})
-_MODULE.string = string
+function package.cinsert(...)
+	local templates = package.split(package.cpath)
+	table.insert(templates, ...)
+	_native_package.cpath = package.concat(templates)
+end
+function package.concat(templates, i, j)
+	local template_separator = string.split(package.config, "\n")[2]
+	return table.concat(templates, template_separator, i, j)
+end
+function package.cremove(position)
+	local templates = package.split(package.cpath)
+	local removed = table.remove(templates, position)
+	_native_package.cpath = package.concat(templates)
+	return removed
+end
+function package.insert(...)
+	local templates = package.split(package.path)
+	table.insert(templates, ...)
+	_native_package.path = package.concat(templates)
+end
+function package.remove(position)
+	local templates = package.split(package.path)
+	local removed = table.remove(templates, position)
+	_native_package.path = package.concat(templates)
+	return removed
+end
+function package.split(path)
+	local template_separator = string.split(package.config, "\n")[2]
+	return string.split(path, template_separator)
+end
 function string.escape(s)
 	local result = {}
 	for _, part in ipairs(string.split(s, "%%%%")) do
@@ -164,11 +199,6 @@ function string.trim(s, pattern)
 	end
 	return string.ltrim(string.rtrim(s, pattern), pattern)
 end
-local _native_table = table
-local table = setmetatable({}, {
-	__index = _native_table,
-})
-_MODULE.table = table
 if _VERSION == "Lua 5.1" then
 	table.pack = function(...)
 		return {
