@@ -152,7 +152,8 @@ function string.ltrim(s, pattern)
 	if pattern == nil then
 		pattern = "%s+"
 	end
-	return s:gsub(("^" .. tostring(pattern)), "")
+	local trimmed = s:gsub(("^" .. tostring(pattern)), "")
+	return trimmed
 end
 function string.pad(s, length, padding)
 	if padding == nil then
@@ -171,7 +172,8 @@ function string.rtrim(s, pattern)
 	if pattern == nil then
 		pattern = "%s+"
 	end
-	return s:gsub((tostring(pattern) .. "$"), "")
+	local trimmed = s:gsub((tostring(pattern) .. "$"), "")
+	return trimmed
 end
 function string.split(s, separator)
 	if separator == nil then
