@@ -112,6 +112,9 @@ print(string.trim) -- nil
 - [`coroutine`](#coroutine)
 - [`debug`](#debug)
 - [`io`](#io)
+    - [`io.exists(path)`](#ioexistspath)
+    - [`io.readfile(path)`](#ioreadfilepath)
+    - [`io.writefile(path, content)`](#iowritefilepath-content)
 - [`math`](#math)
     - [`math.clamp(x, min, max)`](#mathclampx-min-max)
     - [`math.round(x)`](#mathroundx)
@@ -222,10 +225,54 @@ local debug = require('stdlib').debug
 ## `io`
 
 Extension of [Lua's native `io` library](https://www.lua.org/manual/5.1/manual.html#5.7).
-Currently has no additional methods.
 
 ```lua
 local io = require('stdlib').io
+```
+
+- [`io.exists(path)`](#ioexistspath)
+- [`io.readfile(path)`](#ioreadfilepath)
+- [`io.writefile(path, content)`](#iowritefilepath-content)
+
+#### `io.exists(path)`
+
+Returns true if `path` exists in the file system, otherwise false.
+
+```lua
+local io = require('stdlib').io
+
+print(io.exists('my_file') -- true
+print(io.exists('my/nested/file') -- true
+print(io.exists('my_fake_file') -- false
+```
+
+#### `io.readfile(path)`
+
+Reads and returns the entire contents of the file at `path`. Any error messages
+returned from `io.open` or `file:read` are instead thrown via `error`.
+
+```lua
+local io = require('stdlib').io
+
+io.writefile('my_file', 'hello world')
+
+print(io.readfile('my_file') -- hello world
+print(io.readfile('my_fake_file') -- error! my_fake_file does not exist
+```
+
+#### `io.writefile(path, content)`
+
+Overwrites all contents of the file at `path` with `content`. Any error messages
+returned from `io.open` or `file:write` are instead thrown via `error`.
+
+```lua
+local io = require('stdlib').io
+
+print(io.readfile('my_empty_file') -- ''
+
+io.writefile('my_empty_file', 'hello world')
+
+print(io.readfile('my_empty_file') -- hello world
 ```
 
 ## `math`

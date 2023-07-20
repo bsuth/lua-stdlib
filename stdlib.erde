@@ -108,7 +108,50 @@ module function kpairs(t) {
 -- IO
 -- -----------------------------------------------------------------------------
 
--- EMPTY
+function io.exists(path) {
+  local file = io.open(path, 'r')
+
+  if file == nil {
+    return false
+  }
+
+  file:close()
+
+  return true
+}
+
+function io.readfile(path) {
+  local file, error_message = io.open(path)
+
+  if error_message != nil {
+    error(error_message)
+  }
+
+  local content, error_message = file:read('*a')
+  file:close()
+
+  if error_message != nil {
+    error(error_message)
+  }
+
+  return content
+}
+
+function io.writefile(path, content) {
+  local file, error_message = io.open(path, 'w')
+
+  if error_message != nil {
+    error(error_message)
+  }
+
+  -- TODO: check the return value here?
+  local result, error_message = file:write(content)
+  file:close()
+
+  if error_message != nil {
+    error(error_message)
+  }
+}
 
 -- -----------------------------------------------------------------------------
 -- Math

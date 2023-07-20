@@ -72,6 +72,37 @@ local function kpairs(t)
 	return _kpairs_iter, t, nil
 end
 _MODULE.kpairs = kpairs
+function io.exists(path)
+	local file = io.open(path, "r")
+	if file == nil then
+		return false
+	end
+	file:close()
+	return true
+end
+function io.readfile(path)
+	local file, error_message = io.open(path)
+	if error_message ~= nil then
+		error(error_message)
+	end
+	local content, error_message = file:read("*a")
+	file:close()
+	if error_message ~= nil then
+		error(error_message)
+	end
+	return content
+end
+function io.writefile(path, content)
+	local file, error_message = io.open(path, "w")
+	if error_message ~= nil then
+		error(error_message)
+	end
+	local result, error_message = file:write(content)
+	file:close()
+	if error_message ~= nil then
+		error(error_message)
+	end
+end
 function math.clamp(x, min, max)
 	return math.min(math.max(x, min), max)
 end

@@ -137,6 +137,35 @@ spec('io', () -> {
   }
 })
 
+spec('io.exists', () -> {
+  assert.are.equal(true, stdlib.io.exists('mock/empty_file'))
+  assert.are.equal(true, stdlib.io.exists('mock/empty_dir'))
+  assert.are.equal(false, stdlib.io.exists('mock/fake_file'))
+})
+
+spec('io.readfile', () -> {
+  assert.are.equal('', stdlib.io.readfile('mock/empty_file'))
+  assert.are.equal('first line\n', stdlib.io.readfile('mock/single_line_file'))
+  assert.are.equal('first line\nsecond line\n', stdlib.io.readfile('mock/multi_line_file'))
+
+  assert.has_error(() -> stdlib.io.readfile('mock/empty_dir'))
+  assert.has_error(() -> stdlib.io.readfile('mock/fake_file'))
+})
+
+spec('io.writefile', () -> {
+  local function assert_writefile(content) {
+    stdlib.io.writefile('mock/io_writefile', content)
+    assert.are.equal(content, stdlib.io.readfile('mock/io_writefile'))
+  }
+
+  assert_writefile('')
+  assert_writefile('first line')
+  assert_writefile('first line\nsecond line')
+
+  assert.has_error(() -> stdlib.io.writefile('mock/empty_dir', ''))
+  assert.has_error(() -> stdlib.io.writefile('mock/fake_dir/empty_file', ''))
+})
+
 -- -----------------------------------------------------------------------------
 -- Math
 -- -----------------------------------------------------------------------------
