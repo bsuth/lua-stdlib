@@ -120,6 +120,7 @@ print(string.trim) -- nil
     - [`math.round(x)`](#mathroundx)
     - [`math.sign(x)`](#mathsignx)
 - [`os`](#os)
+    - [`os.capture(cmd)`](#oscapturecmd)
 - [`package`](#package)
     - [`package.cinsert([position], template)`](#packagecinsertposition-template)
     - [`package.concat(templates, i = 1, j = #templates)`](#packageconcattemplates-i--1-j--templates)
@@ -329,11 +330,16 @@ print(math.sign(9) -- 1
 ## `os`
 
 Extension of [Lua's native `os` library](https://www.lua.org/manual/5.1/manual.html#5.8).
-Currently has no additional methods.
 
 ```lua
 local os = require('stdlib').os
 ```
+
+- [`os.capture(cmd)`](#oscapturecmd)
+
+#### `os.capture(cmd)`
+
+Executes a command `cmd` and returns the output (stdout) as a string.
 
 ## `package`
 

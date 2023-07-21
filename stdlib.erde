@@ -121,36 +121,16 @@ function io.exists(path) {
 }
 
 function io.readfile(path) {
-  local file, error_message = io.open(path)
-
-  if error_message != nil {
-    error(error_message)
-  }
-
-  local content, error_message = file:read('*a')
+  local file = assert(io.open(path, 'r'))
+  local content = assert(file:read('*a'))
   file:close()
-
-  if error_message != nil {
-    error(error_message)
-  }
-
   return content
 }
 
 function io.writefile(path, content) {
-  local file, error_message = io.open(path, 'w')
-
-  if error_message != nil {
-    error(error_message)
-  }
-
-  -- TODO: check the return value here?
-  local result, error_message = file:write(content)
+  local file = assert(io.open(path, 'w'))
+  assert(file:write(content))
   file:close()
-
-  if error_message != nil {
-    error(error_message)
-  }
 }
 
 -- -----------------------------------------------------------------------------
@@ -183,7 +163,12 @@ function math.sign(x) {
 -- OS
 -- -----------------------------------------------------------------------------
 
--- EMPTY
+function os.capture(cmd) {
+  local file = assert(io.popen(cmd, 'r'))
+  local stdout = assert(file:read('*a'))
+  file:close()
+  return stdout
+}
 
 -- -----------------------------------------------------------------------------
 -- Package

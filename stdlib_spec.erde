@@ -219,6 +219,11 @@ spec('os', () -> {
   }
 })
 
+spec('os.capture', () -> {
+  assert.are.equal('hello world', stdlib.os.capture('printf "hello world"'))
+  assert.are.equal('hello world\n', stdlib.os.capture('echo hello world'))
+})
+
 -- -----------------------------------------------------------------------------
 -- Package
 -- -----------------------------------------------------------------------------

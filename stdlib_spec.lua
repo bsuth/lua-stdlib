@@ -170,6 +170,10 @@ spec("os", function()
 		assert.are.equal(os[key], stdlib.os[key])
 	end
 end)
+spec("os.capture", function()
+	assert.are.equal("hello world", stdlib.os.capture('printf "hello world"'))
+	assert.are.equal("hello world\n", stdlib.os.capture("echo hello world"))
+end)
 spec("package", function()
 	assert.is_table(stdlib.package)
 	for key in pairs(package) do
