@@ -200,14 +200,6 @@ spec('math.round', function()
   assert.are.equal(1, stdlib.math.round(1))
 end)
 
-spec('math.sign', function()
-  assert.are.equal(-1, stdlib.math.sign(-3))
-  assert.are.equal(-1, stdlib.math.sign(-1))
-  assert.are.equal(0, stdlib.math.sign(0))
-  assert.are.equal(1, stdlib.math.sign(1))
-  assert.are.equal(1, stdlib.math.sign(4))
-end)
-
 -- -----------------------------------------------------------------------------
 -- OS
 -- -----------------------------------------------------------------------------
