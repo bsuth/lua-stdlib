@@ -164,38 +164,8 @@ function M.string.chars(s)
 end
 
 function M.string.escape(s)
-  -- Store in local variable to ensure we return only 1 (stylua will remove wrapping parens)
-  local escaped = s:gsub('[().%%+%-*?[^$]', '%%%1')
-  return escaped
-end
-
-function M.string.lpad(s, length, padding)
-  padding = padding or ' '
-  return padding:rep(math.ceil((length - #s) / #padding)) .. s
-end
-
-function M.string.ltrim(s, pattern)
-  pattern = pattern or '%s+'
   -- Wrap in parentheses to ensure we return only 1 value.
-  return (s:gsub('^' .. pattern, ''))
-end
-
-function M.string.pad(s, length, padding)
-  padding = padding or ' '
-  local num_pads = math.ceil(((length - #s) / #padding) / 2)
-  return padding:rep(num_pads) .. s .. padding:rep(num_pads)
-end
-
-function M.string.rpad(s, length, padding)
-  padding = padding or ' '
-  return s .. padding:rep(math.ceil((length - #s) / #padding))
-end
-
-function M.string.rtrim(s, pattern)
-  pattern = pattern or '%s+'
-  -- Store in local variable to ensure we return only 1 (stylua will remove wrapping parens)
-  local trimmed = s:gsub(pattern .. '$', '')
-  return trimmed
+  return (s:gsub('[().%%+%-*?[^$]', '%%%1'))
 end
 
 function M.string.split(s, separator)
@@ -216,7 +186,8 @@ end
 
 function M.string.trim(s, pattern)
   pattern = pattern or '%s+'
-  return M.string.ltrim(M.string.rtrim(s, pattern), pattern)
+  -- Wrap in parentheses to ensure we return only 1 value.
+  return (s:gsub('^' .. pattern, ''):gsub(pattern .. '$', ''))
 end
 
 -- -----------------------------------------------------------------------------
