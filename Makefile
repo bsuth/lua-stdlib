@@ -1,4 +1,4 @@
-.PHONY: default build test
+.PHONY: default test
 
 define runtest
 	$(eval LUA_EXECUTABLE = $(1))
@@ -7,11 +7,7 @@ define runtest
   @echo
 endef
 
-default: | build test
-
-build:
-	erde compile .
-	stylua .
+default: test
 
 test:
 	@echo

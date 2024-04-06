@@ -3,9 +3,6 @@
 An extension of [Lua's standard library](https://www.lua.org/manual/5.1/manual.html#5).
 Works with Lua 5.1+ and LuaJIT.
 
-Only `stdlib.lua` is required. The source file (`stdlib.erde`) is written in
-[Erde](https://erde-lang.github.io/) and compiled to Lua.
-
 ## Library Usage
 
 The module exports both top level functions, as well as tables matching each of
