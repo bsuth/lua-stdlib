@@ -454,15 +454,6 @@ spec('table.deepcopy', function()
   assert_deepcopy({ a = { 'hello' }, { 'world' } })
 end)
 
-spec('table.empty', function()
-  assert.are.equal(true, stdlib.table.empty({}))
-  assert.are.equal(true, stdlib.table.empty({ nil }))
-  assert.are.equal(true, stdlib.table.empty({ a = nil }))
-
-  assert.are.equal(false, stdlib.table.empty({ a = 1 }))
-  assert.are.equal(false, stdlib.table.empty({ 1 }))
-end)
-
 spec('table.filter', function()
   assert.are.same({}, stdlib.table.filter({}, function() return false end))
   assert.are.same({}, stdlib.table.filter({}, function() return true end))

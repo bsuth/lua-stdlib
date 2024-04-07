@@ -256,10 +256,6 @@ function M.table.deepcopy(t)
   return result
 end
 
-function M.table.empty(t)
-  return next(t) == nil
-end
-
 function M.table.filter(t, callback)
   local result = {}
 
