@@ -359,6 +359,28 @@ spec('table', function()
   end
 end)
 
+spec('table.assign', function()
+  local function assert_assign(expected, target, ...)
+    stdlib.table.assign(target, ...)
+    assert.are.same(expected, target)
+  end
+
+  assert_assign({}, {})
+
+  assert_assign({ a = 1 }, {}, { a = 1 })
+  assert_assign({ a = 2 }, {}, { a = 1 }, { a = 2 })
+  assert_assign({ a = 1, b = 2 }, {}, { a = 1 }, { b = 2 })
+  assert_assign({ a = 2 }, { a = 1 }, { a = 2 })
+  assert_assign({ a = 1, b = 2 }, { a = 1 }, { b = 2 })
+  assert_assign({ a = 1, b = 2, c = 3 }, { a = 1, c = 3 }, { b = 2 })
+
+  assert_assign({ 10 }, { 10 })
+  assert_assign({ 10 }, {}, { 10 })
+  assert_assign({ 10, 20, 30 }, { 10, 20 }, { 30 })
+  assert_assign({ 10, 20, 30 }, { 10, 20 }, {}, { 30 })
+  assert_assign({ 10, 20, 30 }, { 10 }, { 20 }, { 30 })
+end)
+
 spec('table.clear', function()
   local function assert_clear(expected, t, callback)
     stdlib.table.clear(t, callback)
@@ -545,23 +567,20 @@ end)
 
 spec('table.merge', function()
   local function assert_merge(expected, target, ...)
-    stdlib.table.merge(target, ...)
-    assert.are.same(expected, target)
+    local merged = stdlib.table.merge(target, ...)
+    assert.are_not.equal(target, merged)
+    assert.are.same(expected, stdlib.table.merge(target, ...))
   end
 
   assert_merge({}, {})
 
-  assert_merge({ a = 1 }, {}, { a = 1 })
-  assert_merge({ a = 2 }, {}, { a = 1 }, { a = 2 })
-  assert_merge({ a = 1, b = 2 }, {}, { a = 1 }, { b = 2 })
+  assert_merge({ a = 1 }, { a = 1 })
   assert_merge({ a = 2 }, { a = 1 }, { a = 2 })
   assert_merge({ a = 1, b = 2 }, { a = 1 }, { b = 2 })
   assert_merge({ a = 1, b = 2, c = 3 }, { a = 1, c = 3 }, { b = 2 })
 
   assert_merge({ 10 }, { 10 })
-  assert_merge({ 10 }, {}, { 10 })
   assert_merge({ 10, 20, 30 }, { 10, 20 }, { 30 })
-  assert_merge({ 10, 20, 30 }, { 10, 20 }, {}, { 30 })
   assert_merge({ 10, 20, 30 }, { 10 }, { 20 }, { 30 })
 end)
 

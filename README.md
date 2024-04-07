@@ -407,6 +407,7 @@ Extension of [Lua's native `table` library](https://www.lua.org/manual/5.1/manua
 local table = require('stdlib').table
 ```
 
+- [`table.assign(t, ...)`](#tableassignt-)
 - [`table.clear(t, callback)`](#tablecleart-callback)
 - [`table.collect(...)`](#tablecollect)
 - [`table.deepcopy(t)`](#tabledeepcopyt)
@@ -415,7 +416,7 @@ local table = require('stdlib').table
 - [`table.has(t, callback)`](#tablehast-callback)
 - [`table.keys(t)`](#tablekeyst)
 - [`table.map(t, callback)`](#tablemapt-callback)
-- [`table.merge(t, ...)`](#tablemerget-)
+- [`table.merge(...)`](#tablemerge)
 - [`table.pack(...)`](#tablepack)
 - [`table.reduce(t, initial, callback)`](#tablereducet-initial-callback)
 - [`table.reverse(t)`](#tablereverset)
@@ -424,11 +425,28 @@ local table = require('stdlib').table
 - [`table.unpack(t, i = 1, j = #t)`](#tableunpackt-i--1-j--t)
 - [`table.values(t)`](#tablevaluest)
 
+#### `table.assign(t, ...)`
+
+Accepts tables as varargs and for each such table, copies all fields and appends
+all array elements into `t`. This is the mutable version of
+[`table.merge(...)`](#tablemerge).
+
+```lua
+local table = require('stdlib').table
+
+local t = { a = 'hi' }
+
+table.assign(t, { b = 'bye' }, { a = 'bye' }, { 10, 20, 30 })
+
+print(t) -- { a = 'bye', b = 'bye', 10, 20, 30 }
+```
+
 #### `table.clear(t, callback)`
 
 If `callback` is a function, expects a function that takes `(value, key)` from
 `t` and returns a boolean. This method will remove all entries from `t` for which
-`callback` returns true.
+`callback` returns true. This is the mutable version of
+[`table.filter(t, callback)`](#tablefiltert-callback).
 
 ```lua
 local table = require('stdlib').table
@@ -493,7 +511,8 @@ print(t.a == clone.a) -- false
 #### `table.filter(t, callback)`
 
 Accepts a callback that takes `(value, key)` from `t` and returns a boolean.
-Returns a subset of `t` for which `callback` returned `true`.
+Returns a subset of `t` for which `callback` returned `true`. This is the
+immutable version of [`table.clear(t, callback)`](#tablecleart-callback).
 
 ```lua
 local table = require('stdlib').table
@@ -597,19 +616,22 @@ end)
 print(mapped) -- { 15, 25, A = 'hello', B = 'world' }
 ```
 
-#### `table.merge(t, ...)`
+#### `table.merge(...)`
 
-Accepts tables as varargs and for each such table, copies all fields and appends
-all array elements into `t`.
+Accepts tables as varargs and returns a table with all fields copied and all
+array elements appended. This is the immutable version of
+[`table.assign(t, ...)`](#tableassignt-).
 
 ```lua
 local table = require('stdlib').table
 
-local t = { a = 'hi' }
+local t = table.merge(
+  { a = 'hi' },
+  { b = 'bye' },
+  { 10, 20, 30 }
+)
 
-table.merge(t, { b = 'bye' }, { a = 'bye' }, { 10, 20, 30 })
-
-print(t) -- { a = 'bye', b = 'bye', 10, 20, 30 }
+print(t) -- { a = 'hi', b = 'bye', 10, 20, 30 }
 ```
 
 #### `table.pack(...)`

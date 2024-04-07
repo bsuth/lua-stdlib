@@ -200,6 +200,18 @@ if _VERSION == 'Lua 5.1' then
   M.table.unpack = unpack
 end
 
+function M.table.assign(t, ...)
+  for _, _t in pairs({ ... }) do
+    for key, value in pairs(_t) do
+      if type(key) == 'number' then
+        table.insert(t, value)
+      else
+        t[key] = value
+      end
+    end
+  end
+end
+
 function M.table.clear(t, callback)
   if type(callback) == 'function' then
     for key, value in M.kpairs(t) do
@@ -321,16 +333,10 @@ function M.table.map(t, callback)
   return result
 end
 
-function M.table.merge(t, ...)
-  for _, _t in pairs({ ... }) do
-    for key, value in pairs(_t) do
-      if type(key) == 'number' then
-        table.insert(t, value)
-      else
-        t[key] = value
-      end
-    end
-  end
+function M.table.merge(...)
+  local result = {}
+  M.table.assign(result, ...)
+  return result
 end
 
 function M.table.reduce(t, initial, callback)
