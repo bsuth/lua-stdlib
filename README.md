@@ -102,6 +102,7 @@ print(string.trim) -- nil
 
 - [`load()`](#load)
 - [`unload()`](#unload)
+- [`compare(a, b)`](#compareab)
 - [`kpairs(t)`](#kpairst)
 
 ### Libraries
@@ -168,13 +169,31 @@ See [Global Usage](#global-usage) for more.
 require('stdlib').unload()
 ```
 
+### `compare(a, b)`
+
+Deep compare the values `a` and `b`, i.e. if both `a` and `b` are tables, then
+ensure they have the same fields / same length, then recursively `compare`
+all of their values, otherwise return `a == b`.
+
+```lua
+local compare = require('stdlib').compare
+
+local a = { a = 'hello', 'world' }
+local b = { a = 'hello', 'world' }
+local c = { a = 'bye', 'world' }
+
+print(compare(a, b)) -- true
+print(compare(a, c)) -- false
+print(compare(b, c)) -- false
+```
+
 ### `kpairs(t)`
 
 Iterator over (key, value) pairs (i.e. the map portion of a table). This acts as
 a counterpart to `ipairs`, so `ipairs` + `kpairs` is equivalent to `pairs`.
 
 ```lua
-local stdlib = require('stdlib')
+local kpairs = require('stdlib').kpairs
 
 local my_table = {
   1,
@@ -183,7 +202,7 @@ local my_table = {
   b = 'world',
 }
 
-for key, value in stdlib.kpairs(my_table) do
+for key, value in kpairs(my_table) do
   -- a hello
   -- b world
   print(key, value)

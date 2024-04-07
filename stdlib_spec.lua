@@ -81,6 +81,24 @@ end)
 -- Globals
 -- -----------------------------------------------------------------------------
 
+spec('compare', function()
+  assert.are.equal(true, stdlib.compare({}, {}))
+
+  assert.are.equal(true, stdlib.compare({ 10 }, { 10 }))
+  assert.are.equal(false, stdlib.compare({ 10, 20 }, { 10 }))
+  assert.are.equal(false, stdlib.compare({ 10 }, { 10, 20 }))
+
+  assert.are.equal(true, stdlib.compare({ a = 'a' }, { a = 'a' }))
+  assert.are.equal(false, stdlib.compare({ a = 'a', b = 'b' }, { a = 'a' }))
+  assert.are.equal(false, stdlib.compare({ a = 'a' }, { a = 'a', b = 'b' }))
+
+  assert.are.equal(true, stdlib.compare({ a = 'a', 10 }, { a = 'a', 10 }))
+  assert.are.equal(false, stdlib.compare({ a = 'a', 10, 20 }, { a = 'a', 10 }))
+  assert.are.equal(false, stdlib.compare({ a = 'a', 10 }, { a = 'a', 10, 20 }))
+  assert.are.equal(false, stdlib.compare({ a = 'a', b = 'b', 10 }, { a = 'a', 10 }))
+  assert.are.equal(false, stdlib.compare({ a = 'a', 10 }, { a = 'a', b = 'b', 10 }))
+end)
+
 spec('kpairs', function()
   local function assert_kpairs(expected, t)
     local result = {}

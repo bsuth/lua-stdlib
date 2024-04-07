@@ -73,6 +73,32 @@ function M.kpairs(t)
   return _kpairs_iter, t, nil
 end
 
+function M.compare(a, b)
+  if type(a) ~= 'table' or type(b) ~= 'table' then
+    return a == b
+  end
+
+  for key in pairs(a) do
+    if b[key] == nil then
+      return false
+    end
+  end
+
+  for key in pairs(b) do
+    if a[key] == nil then
+      return false
+    end
+  end
+
+  for key, value in pairs(a) do
+    if not M.compare(value, b[key]) then
+      return false
+    end
+  end
+
+  return true
+end
+
 -- -----------------------------------------------------------------------------
 -- Coroutine
 -- -----------------------------------------------------------------------------
