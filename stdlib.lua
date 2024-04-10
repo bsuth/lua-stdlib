@@ -69,10 +69,18 @@ local function _kpairs_iter(a, i)
   return key, value
 end
 
+--- @generic V
+--- @param t table<string, V>
+--- @return fun(a: { [string]: V }, i?: string): string, V
+--- @return V
+--- @return nil
 function M.kpairs(t)
   return _kpairs_iter, t, nil
 end
 
+--- @param a unknown
+--- @param b unknown
+--- @return boolean
 function M.compare(a, b)
   if type(a) ~= 'table' or type(b) ~= 'table' then
     return a == b
@@ -115,6 +123,8 @@ end
 -- IO
 -- -----------------------------------------------------------------------------
 
+--- @param path string
+--- @return boolean
 function M.io.exists(path)
   local file = io.open(path, 'r')
 
@@ -127,6 +137,8 @@ function M.io.exists(path)
   return true
 end
 
+--- @param path string
+--- @return string
 function M.io.readfile(path)
   local file = assert(io.open(path, 'r'))
   local content = assert(file:read('*a'))
@@ -134,6 +146,8 @@ function M.io.readfile(path)
   return content
 end
 
+--- @param path string
+--- @param content string
 function M.io.writefile(path, content)
   local file = assert(io.open(path, 'w'))
   assert(file:write(content))
@@ -144,10 +158,16 @@ end
 -- Math
 -- -----------------------------------------------------------------------------
 
+--- @param x number
+--- @param min number
+--- @param max number
+--- @return number
 function M.math.clamp(x, min, max)
   return math.min(math.max(x, min), max)
 end
 
+--- @param x number
+--- @return number
 function M.math.round(x)
   if x < 0 then
     return math.ceil(x - 0.5)
@@ -160,6 +180,8 @@ end
 -- OS
 -- -----------------------------------------------------------------------------
 
+--- @param cmd string
+--- @return string
 function M.os.capture(cmd)
   local file = assert(io.popen(cmd, 'r'))
   local stdout = assert(file:read('*a'))
@@ -185,15 +207,24 @@ local function _string_chars_iter(a, i)
   end
 end
 
+--- @param s string
+--- @return fun(a: string, i?: number): number, string
+--- @return string
+--- @return number
 function M.string.chars(s)
   return _string_chars_iter, s, 0
 end
 
+--- @param s string
+--- @return string
 function M.string.escape(s)
   -- Wrap in parentheses to ensure we return only 1 value.
   return (s:gsub('[().%%+%-*?[^$]', '%%%1'))
 end
 
+--- @param s string
+--- @param separator string
+--- @return string[]
 function M.string.split(s, separator)
   separator = separator or '%s+'
 
@@ -210,6 +241,9 @@ function M.string.split(s, separator)
   return result
 end
 
+--- @param s string
+--- @param pattern string
+--- @return string
 function M.string.trim(s, pattern)
   pattern = pattern or '%s+'
   -- Wrap in parentheses to ensure we return only 1 value.
@@ -226,6 +260,8 @@ if _VERSION == 'Lua 5.1' then
   M.table.unpack = unpack
 end
 
+--- @param t table
+--- @param ... table
 function M.table.assign(t, ...)
   for _, _t in pairs({ ... }) do
     for key, value in pairs(_t) do
@@ -238,38 +274,44 @@ function M.table.assign(t, ...)
   end
 end
 
-function M.table.clear(t, callback)
-  if type(callback) == 'function' then
+--- @generic K, V
+--- @param t table<K, V>
+--- @param condition V | fun(value: V, key: K): boolean
+function M.table.clear(t, condition)
+  if type(condition) == 'function' then
     for key, value in M.kpairs(t) do
-      if callback(value, key) then
+      if condition(value, key) then
         t[key] = nil
       end
     end
 
     for i = #t, 1, -1 do
-      if callback(t[i], i) then
+      if condition(t[i], i) then
         table.remove(t, i)
       end
     end
   else
     for key, value in M.kpairs(t) do
-      if value == callback then
+      if value == condition then
         t[key] = nil
       end
     end
 
     for i = #t, 1, -1 do
-      if t[i] == callback then
+      if t[i] == condition then
         table.remove(t, i)
       end
     end
   end
 end
 
-function M.table.collect(...)
+--- @param iterator fun(): unknown, unknown | nil
+--- @param ... unknown
+--- @return table
+function M.table.collect(iterator, ...)
   local result = {}
 
-  for key, value in ... do
+  for key, value in iterator, ... do
     if value == nil then
       table.insert(result, key)
     else
@@ -280,6 +322,9 @@ function M.table.collect(...)
   return result
 end
 
+--- @generic K, V
+--- @param t table<K, V>
+--- @return table<K, V>
 function M.table.deepcopy(t)
   local result = {}
 
@@ -294,6 +339,10 @@ function M.table.deepcopy(t)
   return result
 end
 
+--- @generic K, V
+--- @param t table<K, V>
+--- @param callback fun(value: V, key: K): boolean
+--- @return table<K, V>
 function M.table.filter(t, callback)
   local result = {}
 
@@ -310,27 +359,39 @@ function M.table.filter(t, callback)
   return result
 end
 
-function M.table.find(t, callback)
-  if type(callback) == 'function' then
+--- @generic K, V
+--- @param t table<K, V>
+--- @param condition V | fun(value: V, key: K): boolean
+--- @return V | nil
+--- @return K | nil
+function M.table.find(t, condition)
+  if type(condition) == 'function' then
     for key, value in pairs(t) do
-      if callback(value, key) then
+      if condition(value, key) then
         return value, key
       end
     end
   else
     for key, value in pairs(t) do
-      if value == callback then
+      if value == condition then
         return value, key
       end
     end
   end
 end
 
-function M.table.has(t, callback)
-  local _, key = M.table.find(t, callback)
+--- @generic K, V
+--- @param t table<K, V>
+--- @param condition V | fun(value: V, key: K): boolean
+--- @return boolean
+function M.table.has(t, condition)
+  local _, key = M.table.find(t, condition)
   return key ~= nil
 end
 
+--- @generic K
+--- @param t table<K>
+--- @return K[]
 function M.table.keys(t)
   local result = {}
 
@@ -341,6 +402,10 @@ function M.table.keys(t)
   return result
 end
 
+--- @generic K, V, nK, nV
+--- @param t table<K, V>
+--- @param callback fun(value: V, key: K): unknown, unknown | nil
+--- @return table
 function M.table.map(t, callback)
   local result = {}
 
@@ -359,12 +424,19 @@ function M.table.map(t, callback)
   return result
 end
 
+--- @param ... table
+--- @return table
 function M.table.merge(...)
   local result = {}
   M.table.assign(result, ...)
   return result
 end
 
+--- @generic K, V, I, R
+--- @param t table<K, V>
+--- @param initial I
+--- @param callback fun(result: I | R, value: V, key: K): R
+--- @return I | R
 function M.table.reduce(t, initial, callback)
   local result = initial
 
@@ -375,6 +447,7 @@ function M.table.reduce(t, initial, callback)
   return result
 end
 
+--- @param t table
 function M.table.reverse(t)
   local len = #t
 
@@ -383,6 +456,9 @@ function M.table.reverse(t)
   end
 end
 
+--- @generic K, V
+--- @param t table<K, V>
+--- @return table<K, V>
 function M.table.shallowcopy(t)
   local result = {}
 
@@ -393,6 +469,9 @@ function M.table.shallowcopy(t)
   return result
 end
 
+--- @generic V
+--- @param t V[]
+--- @return V[]
 function M.table.slice(t, i, j)
   local len = #t
 
@@ -411,6 +490,9 @@ function M.table.slice(t, i, j)
   return result
 end
 
+--- @generic K, V
+--- @param t table<K, V>
+--- @return V[]
 function M.table.values(t)
   local result = {}
 
