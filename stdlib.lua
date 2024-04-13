@@ -86,6 +86,10 @@ function M.compare(a, b)
     return a == b
   end
 
+  if a == b then
+    return true
+  end
+
   for key in pairs(a) do
     if b[key] == nil then
       return false
@@ -98,8 +102,8 @@ function M.compare(a, b)
     end
   end
 
-  for key, value in pairs(a) do
-    if not M.compare(value, b[key]) then
+  for key in pairs(a) do
+    if not M.compare(a[key], b[key]) then
       return false
     end
   end
