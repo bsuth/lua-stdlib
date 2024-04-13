@@ -483,7 +483,7 @@ function M.table.slice(t, i, j)
   if i < 0 then i = i + len + 1 end
   if j < 0 then j = j + len + 1 end
 
-  for k = math.max(i, 0), math.min(j, len) do
+  for k = math.max(i, 1), math.min(j, len) do
     table.insert(result, t[k])
   end
 
