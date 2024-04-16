@@ -181,7 +181,7 @@ function M.string.escape(s)
 end
 
 --- @param s string
---- @param separator string
+--- @param separator? string
 --- @return string[]
 function M.string.split(s, separator)
   separator = separator or '%s+'
@@ -200,7 +200,7 @@ function M.string.split(s, separator)
 end
 
 --- @param s string
---- @param pattern string
+--- @param pattern? string
 --- @return string
 function M.string.trim(s, pattern)
   pattern = pattern or '%s+'
