@@ -214,7 +214,9 @@ end
 
 -- Polyfill `table.pack` and `table.unpack`
 if _VERSION == 'Lua 5.1' then
+  --- @diagnostic disable-next-line: duplicate-set-field
   M.table.pack = function(...) return { n = select('#', ...), ... } end
+  --- @diagnostic disable-next-line: deprecated
   M.table.unpack = unpack
 end
 
