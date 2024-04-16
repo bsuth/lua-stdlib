@@ -10,53 +10,7 @@ local M = {
 }
 
 -- -----------------------------------------------------------------------------
--- Load / Unload
--- -----------------------------------------------------------------------------
-
-function M.load()
-  for key, value in pairs(M) do
-    local value_type = type(value)
-
-    if value_type == 'function' then
-      if key ~= 'load' and key ~= 'unload' then
-        _G[key] = value
-      end
-    elseif value_type == 'table' then
-      local library = _G[key]
-
-      if type(library) == 'table' then
-        for subkey, subvalue in pairs(value) do
-          library[subkey] = subvalue
-        end
-      end
-    end
-  end
-end
-
-function M.unload()
-  for key, value in pairs(M) do
-    local value_type = type(value)
-
-    if value_type == 'function' then
-      if _G[key] == value then -- only remove values we injected
-        _G[key] = nil
-      end
-    elseif value_type == 'table' then
-      local library = _G[key]
-
-      if type(library) == 'table' then
-        for subkey, subvalue in pairs(value) do
-          if library[subkey] == subvalue then -- only remove values we injected
-            library[subkey] = nil
-          end
-        end
-      end
-    end
-  end
-end
-
--- -----------------------------------------------------------------------------
--- Globals
+-- Top Level
 -- -----------------------------------------------------------------------------
 
 local function _kpairs_iter(a, i)
@@ -509,19 +463,16 @@ end
 
 -- -----------------------------------------------------------------------------
 -- Library Metatables
---
--- Set library metatables. We must do this at the end, since our libraries will
--- effectively be frozen once the `__newindex` metamethod is set.
 -- -----------------------------------------------------------------------------
 
-setmetatable(M.coroutine, { __index = coroutine, __newindex = coroutine })
-setmetatable(M.debug, { __index = debug, __newindex = debug })
-setmetatable(M.io, { __index = io, __newindex = io })
-setmetatable(M.math, { __index = math, __newindex = math })
-setmetatable(M.os, { __index = os, __newindex = os })
-setmetatable(M.package, { __index = package, __newindex = package })
-setmetatable(M.string, { __index = string, __newindex = string })
-setmetatable(M.table, { __index = table, __newindex = table })
+setmetatable(M.coroutine, { __index = coroutine })
+setmetatable(M.debug, { __index = debug })
+setmetatable(M.io, { __index = io })
+setmetatable(M.math, { __index = math })
+setmetatable(M.os, { __index = os })
+setmetatable(M.package, { __index = package })
+setmetatable(M.string, { __index = string })
+setmetatable(M.table, { __index = table })
 
 -- -----------------------------------------------------------------------------
 -- Return

@@ -40,7 +40,7 @@ Only libraries from Lua 5.1+ are provided:
 - `string`
 - `table`
 
-Each exported library uses its native library for both `__index` and `__newindex`,
+Each exported library uses its native library as its `__index` metamethod,
 which is especially useful for overriding local references:
 
 ```lua
@@ -53,55 +53,10 @@ print(string.sub('hello world', 1, 5)) -- "hello"
 print(string.trim('  hello world ')) -- "hello world"
 ```
 
-## Global Usage
-
-This module exports two special functions, `load` and `unload`, that can be used
-to inject methods into the global namespace and Lua's native standard library
-tables.
-
-When calling `load`, any top level function exports (other than `load` and
-`unload` themselves) will be injected into `_G` and table exports (i.e. libraries)
-will have their methods copied over to their native Lua counterpart.
-
-```lua
-require('stdlib').load()
-
-local my_table = {
-  1,
-  2,
-  a = 'hello',
-  b = 'world',
-}
-
--- top level function (now global)
-for key, value in kpairs(my_table) do
-  -- a hello
-  -- b world
-  print(key, value)
-end
-
--- native string library (now extended)
-print(string.trim('  hello world ')) -- "hello world"
-```
-
-This action can be undone with `unload`, which will remove all injected methods.
-
-```lua
-local stdlib = require('stdlib')
-
-stdlib.load()
-stdlib.unload()
-
-print(kpairs) -- nil
-print(string.trim) -- nil
-```
-
 ## API
 
 ### Top Level Functions
 
-- [`load()`](#load)
-- [`unload()`](#unload)
 - [`compare(a, b)`](#compareab)
 - [`kpairs(t)`](#kpairst)
 
@@ -144,30 +99,6 @@ print(string.trim) -- nil
     - [`table.values(t)`](#tablevaluest)
 
 ## Top Level Functions
-
-### `load()`
-
-Injects methods into `_G` and Lua's standard libraries (`coroutine`, `debug`, etc).
-
-See [Global Usage](#global-usage) for more.
-
-```lua
-require('stdlib').load()
-```
-
-### `unload()`
-
-Removes injected methods from `_G` and Lua's standard libraries (`coroutine`, `debug`, etc).
-
-A check is done to ensure only methods injected by this module are removed (i.e.
-if `require('stdlib').load()` is called and then the user manually overrides one
-of the injected methods with their own function, it will _not_ be removed).
-
-See [Global Usage](#global-usage) for more.
-
-```lua
-require('stdlib').unload()
-```
 
 ### `compare(a, b)`
 
